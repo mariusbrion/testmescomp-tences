@@ -26,8 +26,8 @@
         .skills-container {
             position: relative;
             width: 100%;
-            height: 800px; /* Augmenté pour accommoder les bulles plus éloignées */
-            max-width: 1200px;
+            height: 900px; /* Augmenté pour accommoder les bulles plus éloignées */
+            max-width: 1400px; /* Augmenté pour plus d'espace */
             margin: 0 auto;
         }
 
@@ -83,27 +83,27 @@
             transform: scale(1.1);
         }
 
-        /* POSITIONNEMENT SYMÉTRIQUE AVEC ÉCARTS ÉGAUX */
+        /* POSITIONNEMENT AVEC +5% D'ÉCART */
         .skill-bubble[data-skill="sig"] {
-            top: 10%;
+            top: 5%; /* Réduit de 10% à 5% pour plus d'écart */
             left: 50%;
             transform: translateX(-50%);
         }
 
         .skill-bubble[data-skill="langues"] {
             top: 50%;
-            left: 10%;
+            left: 5%; /* Réduit de 10% à 5% pour plus d'écart */
             transform: translateY(-50%);
         }
 
         .skill-bubble[data-skill="visualisation"] {
             top: 50%;
-            right: 10%;
+            right: 5%; /* Réduit de 10% à 5% pour plus d'écart */
             transform: translateY(-50%);
         }
 
         .skill-bubble[data-skill="analyse"] {
-            bottom: 10%;
+            bottom: 5%; /* Réduit de 10% à 5% pour plus d'écart */
             left: 50%;
             transform: translateX(-50%);
         }
@@ -137,7 +137,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .skills-container {
-                height: 700px;
+                height: 800px;
             }
             
             .central-bubble {
@@ -159,25 +159,25 @@
             
             /* Ajustement mobile */
             .skill-bubble[data-skill="sig"] {
-                top: 8%;
+                top: 3%;
             }
             
             .skill-bubble[data-skill="analyse"] {
-                bottom: 8%;
+                bottom: 3%;
             }
             
             .skill-bubble[data-skill="langues"] {
-                left: 8%;
+                left: 3%;
             }
             
             .skill-bubble[data-skill="visualisation"] {
-                right: 8%;
+                right: 3%;
             }
         }
 
         @media (max-width: 480px) {
             .skills-container {
-                height: 600px;
+                height: 700px;
             }
             
             .central-bubble {
