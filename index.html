@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio de Marius Brion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&display=swap" rel="stylesheet">
+    <style>
+        /* Styles de base */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Section Compétences - Système Solaire */
+        .skills-section {
+            background-color: #f0f4f8;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skills-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Bulle Centrale */
+        .central-bubble {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background-color: #1a73e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Shrikhand', cursive;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(26, 115, 232, 0.5);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .central-bubble:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        /* Orbite des bulles satellites */
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px dashed rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+        }
+
+        /* Bulles Satellites */
+        .skill-bubble {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: #1a73e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+            transform-origin: center;
+        }
+
+        .skill-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        /* État étendu des bulles */
+        .skill-bubble.expanded {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            z-index: 20;
+            transform: scale(1) !important;
+        }
+
+        .skill-bubble.expanded .content {
+            display: block;
+        }
+
+        .skill-bubble .content {
+            display: none;
+        }
+
+        .skill-bubble .book-image {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animation des orbites */
+        @keyframes orbit {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .central-bubble {
+                width: 150px;
+                height: 150px;
+                font-size: 1rem;
+            }
+            
+            .skill-bubble {
+                width: 100px;
+                height: 100px;
+                font-size: 0.8rem;
+            }
+            
+            .skill-bubble.expanded {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skills-container {
+                height: 100vh;
+            }
+            
+            .central-bubble {
+                width: 120px;
+                height: 120px;
+                font-size: 0.9rem;
+            }
+            
+            .skill-bubble {
+                width: 80px;
+                height: 80px;
+                font-size: 0.7rem;
+                padding: 10px;
+            }
+            
+            .skill-bubble.expanded {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Section "Mes compétences" -->
+    <section id="skills-section" class="skills-section">
+        <h2 style="font-family: 'Shrikhand', cursive; color: #1a73e8; font-size: 2.5rem; margin-bottom: 50px;">
+            Mes Compétences
+        </h2>
+        
+        <div class="skills-container">
+            <!-- Bulle Centrale -->
+            <div class="central-bubble" id="centralBubble">
+                Institut Universitaire<br>de Technologie<br>Bordeaux Montaigne
+            </div>
+            
+            <!-- Orbites (visibles uniquement en développement) -->
+            <div class="orbit" style="width: 500px; height: 500px;"></div>
+            <div class="orbit" style="width: 400px; height: 400px;"></div>
+            
+            <!-- Bulles Satellites -->
+            <div class="skill-bubble" data-skill="sig">
+                SIG et représentation graphique
+                <div class="content">
+                    <img src="https://via.placeholder.com/80x120" alt="Livre SIG" class="book-image">
+                    <img src="https://via.placeholder.com/80x120" alt="Livre Cartographie" class="book-image">
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="langues">
+                Maîtrise de différentes langues
+                <div class="content">
+                    <img src="https://via.placeholder.com/80x120" alt="Livre Langues" class="book-image">
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="visualisation">
+                Compétences en visualisation et maîtrise des données
+                <div class="content">
+                    <img src="https://via.placeholder.com/80x120" alt="Livre Data" class="book-image">
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="analyse">
+                Analyse socio-économique
+                <div class="content">
+                    <img src="https://via.placeholder.com/80x120" alt="Le Suicide d'Emile Durkheim" class="book-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const centralBubble = document.getElementById('centralBubble');
+            const skillBubbles = document.querySelectorAll('.skill-bubble');
+            const orbits = document.querySelectorAll('.orbit');
+            
+            // Configuration des orbites
+            const orbitConfigs = [
+                { radius: 250, speed: 0.3, angle: 0 },  // Orbite extérieure
+                { radius: 180, speed: 0.5, angle: 90 }   // Orbite intérieure
+            ];
+            
+            // Position initiale des bulles
+            skillBubbles.forEach((bubble, index) => {
+                const orbitIndex = index % 2; // Alterne entre les deux orbites
+                const config = orbitConfigs[orbitIndex];
+                
+                // Position initiale
+                updateBubblePosition(bubble, config.angle, config.radius);
+                
+                // Animation
+                setInterval(() => {
+                    if (!bubble.classList.contains('expanded')) {
+                        config.angle += config.speed;
+                        updateBubblePosition(bubble, config.angle, config.radius);
+                    }
+                }, 50);
+            });
+            
+            function updateBubblePosition(bubble, angle, radius) {
+                const radian = angle * (Math.PI / 180);
+                const x = Math.cos(radian) * radius;
+                const y = Math.sin(radian) * radius;
+                
+                bubble.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            }
+            
+            // Gestion des clics sur les bulles satellites
+            skillBubbles.forEach(bubble => {
+                bubble.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Ferme toutes les autres bulles
+                    skillBubbles.forEach(b => {
+                        if (b !== bubble) b.classList.remove('expanded');
+                    });
+                    
+                    // Ouvre/ferme la bulle cliquée
+                    bubble.classList.toggle('expanded');
+                });
+            });
+            
+            // Clic sur la bulle centrale pour tout fermer
+            centralBubble.addEventListener('click', function() {
+                skillBubbles.forEach(bubble => {
+                    bubble.classList.remove('expanded');
+                });
+            });
+            
+            // Clic en dehors pour fermer
+            document.addEventListener('click', function() {
+                skillBubbles.forEach(bubble => {
+                    bubble.classList.remove('expanded');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
