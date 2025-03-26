@@ -13,22 +13,20 @@
             font-family: 'Arial', sans-serif;
             color: #333;
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
-        /* Section Compétences - Système Solaire */
+        /* Section Compétences */
         .skills-section {
             background-color: #f0f4f8;
             padding: 100px 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
         .skills-container {
             position: relative;
             width: 100%;
-            height: 80vh;
+            height: 800px; /* Augmenté pour accommoder les bulles plus éloignées */
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -61,21 +59,11 @@
             transform: translate(-50%, -50%) scale(1.05);
         }
 
-        /* Orbite des bulles satellites */
-        .orbit {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 1px dashed rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-        }
-
         /* Bulles Satellites */
         .skill-bubble {
             position: absolute;
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             background-color: #1a73e8;
             border-radius: 50%;
             display: flex;
@@ -89,11 +77,35 @@
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 5;
-            transform-origin: center;
         }
 
         .skill-bubble:hover {
             transform: scale(1.1);
+        }
+
+        /* POSITIONNEMENT SYMÉTRIQUE AVEC ÉCARTS ÉGAUX */
+        .skill-bubble[data-skill="sig"] {
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .skill-bubble[data-skill="langues"] {
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+        }
+
+        .skill-bubble[data-skill="visualisation"] {
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+        }
+
+        .skill-bubble[data-skill="analyse"] {
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         /* État étendu des bulles */
@@ -122,14 +134,12 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Animation des orbites */
-        @keyframes orbit {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
+            .skills-container {
+                height: 700px;
+            }
+            
             .central-bubble {
                 width: 150px;
                 height: 150px;
@@ -137,8 +147,8 @@
             }
             
             .skill-bubble {
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 120px;
                 font-size: 0.8rem;
             }
             
@@ -146,11 +156,28 @@
                 width: 250px;
                 height: 250px;
             }
+            
+            /* Ajustement mobile */
+            .skill-bubble[data-skill="sig"] {
+                top: 8%;
+            }
+            
+            .skill-bubble[data-skill="analyse"] {
+                bottom: 8%;
+            }
+            
+            .skill-bubble[data-skill="langues"] {
+                left: 8%;
+            }
+            
+            .skill-bubble[data-skill="visualisation"] {
+                right: 8%;
+            }
         }
 
         @media (max-width: 480px) {
             .skills-container {
-                height: 100vh;
+                height: 600px;
             }
             
             .central-bubble {
@@ -160,8 +187,8 @@
             }
             
             .skill-bubble {
-                width: 80px;
-                height: 80px;
+                width: 100px;
+                height: 100px;
                 font-size: 0.7rem;
                 padding: 10px;
             }
@@ -185,10 +212,6 @@
             <div class="central-bubble" id="centralBubble">
                 Institut Universitaire<br>de Technologie<br>Bordeaux Montaigne
             </div>
-            
-            <!-- Orbites (visibles uniquement en développement) -->
-            <div class="orbit" style="width: 500px; height: 500px;"></div>
-            <div class="orbit" style="width: 400px; height: 400px;"></div>
             
             <!-- Bulles Satellites -->
             <div class="skill-bubble" data-skill="sig">
@@ -226,38 +249,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const centralBubble = document.getElementById('centralBubble');
             const skillBubbles = document.querySelectorAll('.skill-bubble');
-            const orbits = document.querySelectorAll('.orbit');
-            
-            // Configuration des orbites
-            const orbitConfigs = [
-                { radius: 250, speed: 0.3, angle: 0 },  // Orbite extérieure
-                { radius: 180, speed: 0.5, angle: 90 }   // Orbite intérieure
-            ];
-            
-            // Position initiale des bulles
-            skillBubbles.forEach((bubble, index) => {
-                const orbitIndex = index % 2; // Alterne entre les deux orbites
-                const config = orbitConfigs[orbitIndex];
-                
-                // Position initiale
-                updateBubblePosition(bubble, config.angle, config.radius);
-                
-                // Animation
-                setInterval(() => {
-                    if (!bubble.classList.contains('expanded')) {
-                        config.angle += config.speed;
-                        updateBubblePosition(bubble, config.angle, config.radius);
-                    }
-                }, 50);
-            });
-            
-            function updateBubblePosition(bubble, angle, radius) {
-                const radian = angle * (Math.PI / 180);
-                const x = Math.cos(radian) * radius;
-                const y = Math.sin(radian) * radius;
-                
-                bubble.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-            }
             
             // Gestion des clics sur les bulles satellites
             skillBubbles.forEach(bubble => {
