@@ -108,6 +108,488 @@
             background-color: rgba(255, 255, 255, 0.4);
         }
 
+        .about-section, .creations-section, .skills-section, .contact-section {
+            background-color: #f0f4f8;
+            padding: 60px 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .about-content, .creations-content, .skills-content, .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .about-content h2, .creations-content h2, .skills-content h2, .contact-content h2 {
+            font-size: 2.5rem;
+            font-family: 'Shrikhand', cursive;
+            margin-bottom: 20px;
+            color: #1a73e8;
+            text-align: center;
+        }
+
+        .about-content p, .creations-content p, .skills-content p, .contact-content p {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .about-content a, .creations-content a, .contact-content a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .about-content a:hover, .creations-content a:hover, .contact-content a:hover {
+            color: #1557b0;
+        }
+
+        .creations-content .chart-iframe {
+            width: 610px;
+            height: 380px;
+            border: none;
+            border-radius: 10px;
+            margin: 20px auto;
+            background-color: white;
+            display: block;
+        }
+
+        .creations-content .looker-iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+            margin: 20px auto;
+            background-color: white;
+            display: block;
+        }
+
+        .creations-content img, .creations-content video {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+
+        .legend-text {
+            font-size: 0.9rem;
+        }
+
+        .skills-section {
+            background-color: #f0f4f8;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .skills-container {
+            position: relative;
+            width: 100%;
+            height: 1400px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .central-bubble {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background-color: #1a73e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Shrikhand', cursive;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(26, 115, 232, 0.5);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .central-bubble:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .central-bubble:not(.expanded) {
+            animation: bounce-central 2s infinite;
+        }
+
+        @keyframes bounce-central {
+            0%, 100% {
+                transform: translate(-50%, -50%);
+            }
+            50% {
+                transform: translate(-50%, calc(-50% - 5px));
+            }
+        }
+
+        .central-bubble.expanded {
+            width: 90vw;
+            height: 90vh;
+            max-width: 1200px;
+            max-height: 800px;
+            border-radius: 20px;
+            background-color: #1557b0;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 30;
+            overflow-y: auto;
+            padding: 40px;
+            display: block;
+        }
+
+        .central-bubble .short-text {
+            display: block;
+        }
+
+        .central-bubble .long-text {
+            display: none;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: white;
+            text-align: justify;
+        }
+
+        .central-bubble.expanded .short-text {
+            display: none;
+        }
+
+        .central-bubble.expanded .long-text {
+            display: block;
+        }
+
+        .central-bubble .long-text h3 {
+            font-family: 'Shrikhand', cursive;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .central-bubble .long-text p {
+            margin-bottom: 20px;
+        }
+
+        .central-bubble .long-text ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .central-bubble .long-text .image-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .central-bubble .long-text .image-container img {
+            max-width: 48%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .skill-bubble {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: #1a73e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .skill-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .skill-bubble[data-skill="sig"] {
+            top: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .skill-bubble[data-skill="langues"] {
+            top: 50%;
+            left: 12%;
+            transform: translateY(-50%);
+        }
+
+        .skill-bubble[data-skill="visualisation"] {
+            top: 50%;
+            right: 12%;
+            transform: translateY(-50%);
+        }
+
+        .skill-bubble[data-skill="analyse"] {
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .skill-bubble[data-skill="sig"]:not(.expanded),
+        .skill-bubble[data-skill="analyse"]:not(.expanded) {
+            animation: bounce-x 2s infinite;
+        }
+
+        @keyframes bounce-x {
+            0%, 100% {
+                transform: translateX(-50%);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .skill-bubble[data-skill="langues"]:not(.expanded),
+        .skill-bubble[data-skill="visualisation"]:not(.expanded) {
+            animation: bounce-y 2s infinite;
+        }
+
+        @keyframes bounce-y {
+            0%, 100% {
+                transform: translateY(-50%);
+            }
+            50% {
+                transform: translateY(calc(-50% - 5px));
+            }
+        }
+
+        .skill-bubble.expanded {
+            width: 500px;
+            height: 500px;
+            border-radius: 20px;
+            z-index: 20;
+            transform: scale(1) !important;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .skill-bubble.expanded {
+                width: 400px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skill-bubble.expanded {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        .skill-bubble .short-text {
+            display: block;
+        }
+
+        .skill-bubble .long-text {
+            display: none;
+            font-size: 0.9rem;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .skill-bubble.expanded .short-text {
+            display: none;
+        }
+
+        .skill-bubble.expanded .long-text {
+            display: block;
+        }
+
+        .skill-bubble .long-text .bubble-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .skill-bubble .long-text .bubble-content h3 {
+            font-family: 'Shrikhand', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-top: 60px; /* SIG: 40 + 20 */
+        }
+
+        .skill-bubble[data-skill="langues"] .long-text .bubble-content h3 {
+            padding-top: 680px; /* 280 + 400 */
+        }
+
+        .skill-bubble[data-skill="visualisation"] .long-text .bubble-content h3 {
+            padding-top: 70px; /* 100 - 30 */
+        }
+
+        .skill-bubble[data-skill="analyse"] .long-text .bubble-content h3 {
+            padding-top: 335px; /* 350 - 15 */
+        }
+
+        .skill-bubble .long-text .bubble-content .skill-paragraph {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .skill-bubble .long-text .bubble-content .skill-image {
+            width: 80%;
+            height: auto;
+            border-radius: 5px;
+            margin: 10px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .skill-bubble .long-text .bubble-content .sheets-iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            background-color: white;
+            display: block;
+        }
+
+        .skill-bubble .long-text .image-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .skill-bubble .long-text .image-container img {
+            max-width: 48%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .skill-bubble[data-skill="langues"] .long-text .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-bubble[data-skill="langues"] .long-text .image-container img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .interactive-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            font-family: 'Shrikhand', cursive;
+            color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: block;
+        }
+
+        .central-bubble.expanded .interactive-hint,
+        .skill-bubble.expanded .interactive-hint {
+            display: none;
+        }
+
+        .calculator-preview {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-section {
+            background-color: #f0f4f8;
+            padding: 60px 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .contact-content h2 {
+            font-size: 2.5rem;
+            font-family: 'Shrikhand', cursive;
+            margin-bottom: 20px;
+            color: #1a73e8;
+            text-align: center;
+        }
+
+        .contact-content p {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: #1557b0;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -116,6 +598,90 @@
             .box {
                 width: 120px;
                 font-size: 1rem;
+            }
+
+            .skills-container {
+                height: 800px;
+            }
+            
+            .central-bubble {
+                width: 150px;
+                height: 150px;
+                font-size: 1rem;
+            }
+            
+            .central-bubble.expanded {
+                width: 95vw;
+                height: 80vh;
+                padding: 20px;
+            }
+            
+            .central-bubble .long-text .image-container img {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .skill-bubble {
+                width: 120px;
+                height: 120px;
+                font-size: 0.8rem;
+            }
+            
+            .skill-bubble[data-skill="sig"] {
+                top: 10%;
+            }
+            
+            .skill-bubble[data-skill="analyse"] {
+                bottom: 10%;
+            }
+            
+            .skill-bubble[data-skill="langues"] {
+                left: 10%;
+            }
+            
+            .skill-bubble[data-skill="visualisation"] {
+                right: 10%;
+            }
+
+            .skill-bubble .long-text .bubble-content h3 {
+                padding-top: 50px; /* SIG: 30 + 20 */
+            }
+
+            .skill-bubble[data-skill="langues"] .long-text .bubble-content h3 {
+                padding-top: 630px; /* 230 + 400 */
+            }
+
+            .skill-bubble[data-skill="visualisation"] .long-text .bubble-content h3 {
+                padding-top: 40px; /* 70 - 30 */
+            }
+
+            .skill-bubble[data-skill="analyse"] .long-text .bubble-content h3 {
+                padding-top: 285px; /* 300 - 15 */
+            }
+
+            .skill-bubble .long-text .bubble-content .sheets-iframe {
+                height: 180px;
+            }
+
+            .creations-content .chart-iframe {
+                width: 510px;
+                height: 360px;
+            }
+
+            .creations-content .looker-iframe {
+                height: 500px;
+            }
+
+            .contact-content h2 {
+                font-size: 2rem;
+            }
+
+            .contact-content {
+                font-size: 1rem;
+            }
+
+            .contact-link {
+                font-size: 1.1rem;
             }
         }
 
@@ -127,6 +693,84 @@
             .box {
                 width: 100px;
                 font-size: 0.9rem;
+            }
+
+            .skills-container {
+                height: 700px;
+            }
+            
+            .central-bubble {
+                width: 120px;
+                height: 120px;
+                font-size: 0.9rem;
+            }
+            
+            .central-bubble.expanded {
+                width: 95vw;
+                height: 85vh;
+                padding: 15px;
+            }
+            
+            .central-bubble .long-text h3 {
+                font-size: 1.5rem;
+            }
+            
+            .central-bubble .long-text .image-container img {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .skill-bubble {
+                width: 100px;
+                height: 100px;
+                font-size: 0.7rem;
+                padding: 10px;
+            }
+
+            .skill-bubble .long-text .bubble-content h3 {
+                padding-top: 40px; /* SIG: 20 + 20 */
+            }
+
+            .skill-bubble[data-skill="langues"] .long-text .bubble-content h3 {
+                padding-top: 600px; /* 200 + 400 */
+            }
+
+            .skill-bubble[data-skill="visualisation"] .long-text .bubble-content h3 {
+                padding-top: 20px; /* 50 - 30 */
+            }
+
+            .skill-bubble[data-skill="analyse"] .long-text .bubble-content h3 {
+                padding-top: 265px; /* 280 - 15 */
+            }
+
+            .skill-bubble .long-text .bubble-content .sheets-iframe {
+                height: 150px;
+            }
+
+            .skill-bubble .long-text .image-container img {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .creations-content .chart-iframe {
+                width: 100%;
+                height: 300px;
+            }
+
+            .creations-content .looker-iframe {
+                height: 400px;
+            }
+
+            .contact-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .contact-content {
+                font-size: 0.9rem;
+            }
+
+            .contact-link {
+                font-size: 1rem;
             }
         }
     </style>
@@ -156,5 +800,275 @@
             <a href="#me-contacter-section" class="box">Me contacter</a>
         </div>
     </section>
+
+    <!-- Section "À propos" -->
+    <section id="about-section" class="about-section">
+        <div class="about-content">
+            <h2>À propos de moi</h2>
+            <p>
+                Étudiant en deuxième année de BUT Villes et Territoires Durables à l'IUT Bordeaux Montaigne, je suis passionné par l'aménagement du territoire et l'urbanisme durable. Mon parcours académique, enrichi par des stages pratiques, m'a permis de développer une compréhension approfondie des enjeux urbains et environnementaux qui façonnent notre quotidien.<br><br>
+                Au cours de mon stage d'un mois à l'agglomération du <a href="https://www.grand-chatellerault.fr/" target="_blank">Grand Châtellerault</a>, j'ai activement contribué au programme Action Cœur de Ville, visant à revitaliser le centre-ville et à encourager un urbanisme plus inclusif. Mon stage de deux mois à l'<a href="https://www.at86.fr/" target="_blank">Agence des Territoires de la Vienne</a> m'a permis d'intervenir sur des projets stratégiques d'aménagement, avec un focus particulier sur la gestion des mobilités et le développement de territoires durables.<br><br>
+                Ces expériences professionnelles m'ont non seulement permis de comprendre les enjeux locaux, mais elles ont aussi renforcé mon désir de poursuivre un master en urbanisme pour approfondir mes compétences théoriques et pratiques, et contribuer à la construction de villes intelligentes et résilientes.<br><br>
+                Dynamique, curieux et profondément engagé, je cherche à m'investir dans des projets innovants qui allient développement territorial, transition énergétique et bien-être des citoyens. Mon objectif est de contribuer activement à l'évolution des territoires pour répondre aux défis contemporains, qu'il s'agisse de la gestion des mobilités, de la transition écologique ou de la revitalisation des espaces urbains.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section "Mes créations" -->
+    <section id="creations-section" class="creations-section">
+        <div class="creations-content">
+            <h2>Mes créations</h2>
+            <p>
+                Voici l'un de mes projets récents : un <span class="highlight">Calculateur Carbone</span> qui permet de calculer le coût social de la création de logements en périphérie des villes, en prenant en compte l'impact d'un mode de vie dépendant de la voiture.
+            </p>
+            <p>
+                Ce projet a été conçu pour sensibiliser aux enjeux de l'étalement urbain et de la transition écologique. Vous pouvez explorer le calculateur en cliquant sur le lien ci-dessous :
+            </p>
+            <p>
+                <a href="https://mariusbrion.github.io/calculateur-carbone/" target="_blank">Accéder au Calculateur Carbone</a>
+            </p>
+            
+            <img src="calculateur.png" alt="Capture d'écran du Calculateur Carbone" class="calculator-preview">
+            
+            <p>
+                Pour développer le Calculateur Carbone, je me suis appuyé sur une analyse de la corrélation linéaire entre l'électrification du parc automobile et la baisse des émissions moyennes de CO₂ par véhicule. Voici l'analyse graphique qui illustre cette relation :
+            </p>
+            
+            <iframe class="chart-iframe" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQG1iuKlUeFgOQEBmkmMqDFTJz-pRB_EmnRLedFQ9dKHkIEdEFJdZaBTAT7tK_rjNyjSiDXgUGHDOWd/pubchart?oid=56657791&format=interactive&embedded=true"></iframe>
+            
+            <p>
+                Ce graphique montre une corrélation négative forte (R² = 0,989), ce qui signifie qu'une augmentation du pourcentage de véhicules électriques dans le parc automobile entraîne une réduction significative des émissions de CO₂. Toutefois, grâce à l'outil du Calculateur Carbone, on voit que cette solution ne suffit pas à faire du mode de vie <a href="https://fr.wikipedia.org/wiki/Rurbanisation" target="_blank">rurbain</a> un mode de vie durable.
+            </p>
+
+            <h3>Cartographie 3D des mobilités pendulaires</h3>
+            <p>
+                Voici une réalisation cartographique en 3D illustrant les mobilités pendulaires sur la ville de Châtellerault, avec les bâtiments colorés selon leur destination :
+            </p>
+            
+            <video autoplay muted loop controls>
+                <source src="cartographie3D.mov" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #1a73e8;"></div>
+                    <span class="legend-text">Résidentiel</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #0b6623;"></div>
+                    <span class="legend-text">Commerce</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4CAF50;"></div>
+                    <span class="legend-text">Agricole</span>
+                </div>
+            </div>
+            
+            <p>
+                Cette cartographie interactive 3D, réalisée à l'aide de QGIS, Kepler.gl, geojson.io et Excel, permet d'explorer les habitudes de mobilité domicile-travail en zone périurbaine. Elle met en lumière l'impact de la concentration des bâtiments à usage commercial (issus des données 3D de l'IGN) sur les flux pendulaires, en soulignant comment ces implantations influencent les dynamiques de déplacement quotidien. Les bâtiments sont représentés en 3D, avec une coloration selon leur usage principal : bleu pour les zones résidentielles, vert foncé pour les commerces et vert clair pour les espaces agricoles.
+            </p>
+            <p>
+                Ce travail cartographique complète le calculateur carbone développé en parallèle, en illustrant sur un support spatial concret les effets territoriaux et écologiques des mobilités pendulaires. L'impact environnemental est estimé à travers un indice économique fondé sur le coût social du carbone par tonne de CO₂, tel que défini par l'<a href="https://www.insee.fr/fr/statistiques/8276271?sommaire=8071406" target="_blank">INSEE dans son étude de 2023</a>.
+            </p>
+
+            <h3>Analyse des émissions de CO₂ dans le secteur des transports en Europe (2023)</h3>
+            <p class="skill-paragraph">
+                Ce dashboard interactif a été réalisé à partir d’un croisement de données issues de l’Agence européenne pour l’environnement – notamment les <a href="https://co2cars.apps.eea.europa.eu/?source=%7B%22track_total_hits%22%3Atrue%2C%22query%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22constant_score%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22year%22%3A2023%7D%7D%5D%7D%7D%2C%7B%22bool%22%3A%7B%22should%22%3A%5B%7B%22term%22%3A%7B%22scStatus%22%3A%22Final%22%7D%7D%5D%7D%7D%5D%7D%7D%7D%7D%5D%7D%7D%2C%22display_type%22%3A%22tabular%22%7D" target="_blank">émissions moyennes de CO₂ des véhicules particuliers neufs</a> et l’<a href="https://www.eea.europa.eu/en/analysis/maps-and-charts/greenhouse-gases-viewer-data-viewers" target="_blank">inventaire des émissions de gaz à effet de serre</a> – et de la Banque mondiale, pour les <a href="https://donnees.banquemondiale.org/indicator/SP.POP.TOTL?end=2023&name_desc=false&start=2023&view=map&year=1960" target="_blank">données démographiques</a>. L’ensemble de ces données a été agrégé et structuré via Google Sheets, avant d’être visualisé dans Looker Studio.<br><br>
+                La carte européenne en 3D illustre, par des barres verticales, les émissions de CO₂ par habitant liées au secteur des transports, tandis que la couleur des pays reflète les émissions moyennes des nouveaux véhicules particuliers vendus. Cette représentation est complétée par un indicateur de la moyenne européenne, et un graphique croisé qui compare, pour chaque pays, les émissions des véhicules neufs (en orange) avec les émissions globales par habitant (en bleu).<br><br>
+                L’objectif de cette visualisation est de proposer une lecture critique des dynamiques de décarbonation à l’échelle européenne. Elle met en évidence l’absence de corrélation directe entre la performance environnementale des véhicules neufs et les émissions globales du secteur des transports par habitant. Certains pays, malgré des ventes de véhicules neufs parmi les moins émetteurs, conservent des niveaux élevés d’émissions globales, tandis que d’autres, avec un parc automobile techniquement plus polluant, affichent de meilleures performances globales.<br><br>
+                Cela souligne que l’électrification, encore marginale à l’échelle des flottes nationales, ne suffit pas à infléchir significativement les tendances, et que d’autres facteurs pèsent davantage dans la balance : accessibilité des services, aménagement du territoire, modes de vie, distances parcourues ou encore part modale de l’aviation.
+            </p>
+            <iframe class="looker-iframe" src="https://lookerstudio.google.com/embed/reporting/88ef1b09-3975-4195-97b4-14f57f97abab/page/0FgHF" frameborder="0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+            <p class="skill-paragraph">
+                Grâce aux filtres dynamiques intégrés à la courbe comparant les émissions des nouveaux véhicules vendus (en orange) avec les émissions du secteur des transports par habitant (en bleu), vous pouvez sélectionner directement à la souris un ensemble de pays (en restant appuyé sur la courbe bleue et en faisant glisser, vous pouvez sélectionner quelques pays sur qui réduire l’analyse). Il est ainsi possible, par exemple, de mettre en évidence ceux dont les nouveaux véhicules sont les plus polluants, et d’observer instantanément leur localisation sur la carte ainsi que leur niveau moyen d’émissions. Cette interaction facilite l’exploration des contrastes et illustre la diversité des dynamiques territoriales dans la transition des mobilités.<br><br>
+                Cette prise de recul à l’échelle européenne vient compléter l’analyse territoriale des mobilités pendulaires menée précédemment. Alors que les cartes interactives 3D exploraient les effets de l’urbanisation et de la localisation des activités sur les flux quotidiens et leur impact environnemental, ce Dashboard met en évidence que les réponses techniques seules (comme l’achat de véhicules électriques) ne suffisent pas si elles ne sont pas accompagnées de transformations plus structurelles : aménagements urbains, accessibilité des services, et évolution des usages.<br><br>
+                Il souligne ainsi la nécessité d’une approche systémique pour réellement réduire les émissions d’un des secteurs les plus polluants d’Europe.
+            </p>
+
+            <h3>Lecture réglementaire et écologique d’un territoire à travers QGIS (animation cartographique)</h3>
+            <p>
+                L’animation suivante illustre ma capacité à mobiliser des données simples – telles que les emprises bâties, les infrastructures, les espaces naturels protégés ou les zones de protection patrimoniale – pour construire une lecture fine et réglementaire d’un territoire à l’aide de QGIS.<br><br>
+                Elle intègre notamment la visualisation de certaines normes du Plan Local d’Urbanisme (PLU), comme les haies protégées, les espaces verts à préserver ou les périmètres liés aux monuments historiques. Ces éléments traduisent les contraintes réglementaires locales qui orientent les choix d’aménagement et structurent les dynamiques urbaines et rurales.
+            </p>
+            <video autoplay muted loop controls>
+                <source src="cartographiecreations.mov" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+            <p>
+                Cette approche permet également de situer un projet dans son contexte territorial, comme en témoigne l’introduction de l’animation avec la carte des parcs touristiques alentours, utilisée ici pour étudier l’implantation potentielle d’un nouveau parc. Ce croisement entre données réglementaires, environnementales et fonctionnelles est fondamental pour évaluer la faisabilité d’un projet et anticiper ses interactions avec le territoire.<br><br>
+                Maîtriser ces visualisations constitue ainsi une compétence essentielle pour tout travail de diagnostic, de planification ou de conception territoriale.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION "Mes compétences" -->
+    <section id="skills-section" class="skills-section">
+        <h2 style="font-family: 'Shrikhand', cursive; color: #1a73e8; font-size: 2.5rem; margin-bottom: 50px;">
+            Mes Compétences
+        </h2>
+        
+        <div class="skills-container">
+            <!-- Bulle Centrale -->
+            <div class="central-bubble" id="centralBubble">
+                <span class="short-text">Institut Universitaire<br>de Technologie<br>Bordeaux Montaigne</span>
+                <span class="interactive-hint">Cliquer !</span>
+                <div class="long-text">
+                    <h3>Accès à la culture en milieu carcéral : une table ronde engagée lors du Festisol</h3>
+                    <p>Dans le cadre du <strong>Festisol (Festival des Solidarités)</strong>, nous avons mis en place au sein de notre IUT une commission thématique intitulée <strong>"Évasion culturelle"</strong>, dont l'objectif central était de promouvoir l'accès à la culture en milieu carcéral. Cette initiative est née de la conviction que la culture peut être un puissant levier d’émancipation, de reconstruction personnelle et de réinsertion sociale. Elle permet aussi d’éviter que la prison ne devienne une école de la récidive, en offrant des perspectives, des outils d’expression et des chemins de transformation individuelle.</p>
+                    <p>En tant que membre actif de cette commission, j’ai eu la responsabilité de concevoir, organiser et animer une table ronde publique consacrée à cette thématique. Cet événement a rassemblé plus d’une centaine de personnes, principalement des étudiant·e·s et des enseignant·e·s de l’IUT, sensibles aux enjeux sociaux liés à l’accès à la culture.</p>
+                    <h3>Des intervenants aux parcours forts et inspirants</h3>
+                    <p>Pour alimenter cette réflexion collective, nous avons eu l’honneur d’accueillir trois intervenants aux expériences complémentaires et au discours engagé :</p>
+                    <ul>
+                        <li><strong>David Desclos</strong>, ancien détenu multirécidiviste, aujourd’hui humoriste et auteur de spectacles inspirés de son vécu carcéral. À travers son témoignage, il a partagé comment l’expression artistique lui a permis de trouver une voie de réinsertion, tout en déconstruisant les stéréotypes sur les personnes incarcérées.</li>
+                        <li><strong>Corentin Blanchard</strong>, lui aussi passé par la case prison en tant que mineur, est aujourd’hui fondateur d’une association dédiée à la promotion de l’accès à la culture dans les quartiers populaires. Son objectif : proposer aux jeunes des alternatives concrètes à la délinquance par la découverte artistique et culturelle.</li>
+                        <li><strong>Sarah Erasmi</strong>, membre de l’association France Amérique Latine, intervient régulièrement dans des établissements pénitentiaires, notamment la prison pour mineurs de Gradignan, où elle organise des actions culturelles et de sensibilisation. Elle a apporté un éclairage précieux sur les dynamiques culturelles en détention et les partenariats associatifs possibles.</li>
+                    </ul>
+                    <h3>Un événement marquant et porteur de sens</h3>
+                    <p>La table ronde a permis de croiser des parcours de vie, des approches militantes et des initiatives concrètes pour penser l’accès à la culture comme un droit fondamental, y compris derrière les murs des prisons. En tant qu’animateur de ce débat, j’ai veillé à faire dialoguer ces voix singulières tout en gardant un fil conducteur accessible pour le public, favorisant les échanges et la réflexion.</p>
+                    <div class="image-container">
+                        <img src="table_ronde_1.JPG" alt="Photo de la table ronde 1">
+                        <img src="table_ronde_2.JPG" alt="Photo de la table ronde 2">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bulles Satellites -->
+            <div class="skill-bubble" data-skill="sig">
+                <span class="short-text">SIG et représentation graphique</span>
+                <span class="interactive-hint">Cliquer !</span>
+                <div class="long-text">
+                    <div class="bubble-content">
+                        <h3>SIG et Représentation Graphique</h3>
+                        <p class="skill-paragraph">
+                            Maîtrise avancée de QGIS pour la création de cartes thématiques, le géotraitement et l'analyse spatiale, ainsi que de Kepler.gl pour la visualisation de données géospatiales. Ces outils me permettent de transformer des données complexes en représentations visuelles claires et informatives.<br><br>
+                            L'exemple de carte présenté ci-dessous illustre les inégalités de répartition de la population dans la Vienne. La taille des communes est proportionnelle à leur population, ce qui permet de visualiser de manière frappante les disparités en termes de moyens communaux, notamment dans les zones rurales où la densité est plus faible. Cette approche aide à mieux comprendre les enjeux d'équité territoriale et à proposer des solutions adaptées.
+                        </p>
+                        <img src="cartopopulation.png" alt="Exemple de cartographie" class="skill-image">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="langues">
+                <span class="short-text">Langues et outils numériques</span>
+                <span class="interactive-hint">Cliquer !</span>
+                <div class="long-text">
+                    <div class="bubble-content">
+                        <h3>Langues et Outils Numériques</h3>
+                        <p class="skill-paragraph"><strong>Langues</strong></p>
+                        <ul>
+                            <li>Français : Langue maternelle</li>
+                            <li>Anglais : Niveau B2+ – Certificat Cambridge (expression orale et compréhension écrite validées à un niveau professionnel C1)</li>
+                            <li>Allemand : Niveau B1</li>
+                            <li>Espagnol : Niveau B1</li>
+                        </ul>
+                        <p class="skill-paragraph"><strong>Langages et outils numériques</strong></p>
+                        <ul>
+                            <li>HTML/CSS : Création de sites web (ex. : ce portfolio)</li>
+                            <li>Looker Studio : Visualisation de données et création de dashboards interactifs</li>
+                            <li>Google Sheets/Excel : Nettoyage, structuration et analyse de données à grande échelle</li>
+                            <li>QGIS / Kepler.gl : Cartographie interactive et analyse spatiale</li>
+                        </ul>
+                        <div class="image-container">
+                            <img src="cambridge_cert_1.jpg" alt="Certificat Cambridge C1 - Partie 1">
+                            <img src="cambridge_cert_2.jpg" alt="Certificat Cambridge C1 - Partie 2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="visualisation">
+                <span class="short-text">Visualisation de données</span>
+                <span class="interactive-hint">Cliquer !</span>
+                <div class="long-text">
+                    <div class="bubble-content">
+                        <h3>Visualisation et Analyse de Données</h3>
+                        <p class="skill-paragraph">
+                            L’exemple présenté ci-dessous montre ma capacité à structurer, nettoyer et analyser des données à grande échelle (issues de trois sources européennes) via Google Sheets, avant de les restituer visuellement de manière claire. Ce travail permet de croiser plusieurs indicateurs (émissions de CO₂, typologies de véhicules, données démographiques) pour révéler des contrastes souvent invisibles dans les moyennes nationales.<br><br>
+                            Le tableau de données ci-dessous a servi de base à la visualisation graphique visible dans la section Mes créations, intitulée Analyse européenne des émissions de CO₂ dans les transports, illustrant ainsi ma capacité à mobiliser la donnée comme levier de compréhension territoriale, à des fins d’analyse critique et d’aide à la décision.
+                        </p>
+                        <iframe class="sheets-iframe" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTyCeQoxzkmSvx91E2jDk8VusqqxZAr6vvw6yBK4_gWB4NchnvDabFbZuJ3NlcWXCq8jv5QGznFqOmt/pubhtml?widget=true&headers=false" frameborder="0" scrolling="no" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-bubble" data-skill="analyse">
+                <span class="short-text">Analyse territoriale</span>
+                <span class="interactive-hint">Cliquer !</span>
+                <div class="long-text">
+                    <div class="bubble-content">
+                        <h3>Analyse Socio-économique et Territoriale</h3>
+                        <p class="skill-paragraph">
+                            Ces deux ouvrages illustrent mon intérêt pour l’analyse territoriale à travers les fondements des sciences humaines.<br><br>
+                            Le Suicide d’Émile Durkheim, œuvre fondatrice de la sociologie moderne, propose une lecture rigoureuse des comportements humains à travers les structures sociales. En analysant les liens entre cohésion collective, isolement et régulation sociale, Durkheim offre des clés précieuses pour comprendre les logiques de fonctionnement des sociétés et leur traduction territoriale.<br><br>
+                            De manière complémentaire, Urban Typology: 50 Case Studies de John Lang explore l’impact concret des formes urbaines sur la vie quotidienne, l’organisation économique et les usages de l’espace. À travers une série d’exemples internationaux, l’ouvrage met en lumière la manière dont les choix d’aménagement influencent les pratiques urbaines et la qualité de vie.<br><br>
+                            Ces lectures – parmi d’autres articles et ouvrages scientifiques – nourrissent ma réflexion et ma posture analytique. Elles renforcent ma capacité à croiser approches qualitatives (entretiens, enquêtes) et quantitatives (statistiques, cartographies) pour décrypter la complexité des territoires.
+                        </p>
+                        <div class="image-container">
+                            <img src="emile-durkheim.jpg" alt="Exemple d'analyse territoriale">
+                            <img src="urban-typology.jpg" alt="Typologie urbaine">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section "Me contacter" -->
+    <section id="me-contacter-section" class="contact-section">
+        <div class="contact-content">
+            <h2>Merci pour votre visite</h2>
+            <p>
+                Merci d’avoir pris le temps de parcourir mon portfolio. J’espère que ces projets et analyses ont su refléter mon engagement pour les territoires durables, ma curiosité intellectuelle et ma capacité à mobiliser les outils d’analyse pour comprendre les dynamiques urbaines.<br><br>
+                Si vous souhaitez échanger, me poser une question ou discuter d’une opportunité, n’hésitez pas à me contacter. Vous pouvez également télécharger mon CV ci-dessous pour obtenir une vue d’ensemble de mon parcours.
+            </p>
+            <div class="contact-links">
+                <p><a href="CV-Marius-Brion.pdf" target="_blank" class="contact-link">👉 Télécharger mon CV</a></p>
+                <p><a href="mailto:marius.brion@icloud.com" class="contact-link">📬 Me contacter</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const centralBubble = document.getElementById('centralBubble');
+            const skillBubbles = document.querySelectorAll('.skill-bubble');
+            
+            // Gestion du clic sur la bulle centrale
+            centralBubble.addEventListener('click', function(e) {
+                e.stopPropagation();
+                centralBubble.classList.toggle('expanded');
+                
+                // Ferme toutes les bulles satellites si la bulle centrale est ouverte
+                if (centralBubble.classList.contains('expanded')) {
+                    skillBubbles.forEach(bubble => bubble.classList.remove('expanded'));
+                }
+            });
+            
+            // Gestion des clics sur les bulles satellites
+            skillBubbles.forEach(bubble => {
+                bubble.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Ferme toutes les autres bulles satellites et la bulle centrale
+                    skillBubbles.forEach(b => {
+                        if (b !== bubble) b.classList.remove('expanded');
+                    });
+                    centralBubble.classList.remove('expanded');
+                    
+                    // Ouvre/ferme la bulle cliquée
+                    bubble.classList.toggle('expanded');
+                });
+            });
+            
+            // Clic en dehors pour fermer toutes les bulles
+            document.addEventListener('click', function(e) {
+                if (!centralBubble.contains(e.target) && !Array.from(skillBubbles).some(bubble => bubble.contains(e.target))) {
+                    centralBubble.classList.remove('expanded');
+                    skillBubbles.forEach(bubble => bubble.classList.remove('expanded'));
+                }
+            });
+        });
+    </script>
 </body>
 </html>
