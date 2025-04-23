@@ -4,281 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio de Marius Brion</title>
+    <!-- Ajout de la police Shrikhand depuis Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Shrikhand&display=swap" rel="stylesheet">
     <style>
-        /* Styles de base */
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Times New Roman', serif;
             color: #333;
             scroll-behavior: smooth;
         }
 
-        /* Section Compétences */
-        .skills-section {
-            background-color: #f0f4f8;
-            padding: 100px 20px;
-            text-align: center;
+        .home-section {
             position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
         }
 
-        .skills-container {
-            position: relative;
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 1400px;
-            max-width: 1400px;
-            margin: 0 auto;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
         }
 
-        /* Bulle Centrale */
-        .central-bubble {
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Réduire la qualité vidéo sur mobile pour améliorer le chargement */
+        @media (max-width: 768px) {
+            .video-background video {
+                object-fit: contain;
+            }
+        }
+
+        .name {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            background-color: #1a73e8;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
             color: white;
+            z-index: 2;
             font-family: 'Shrikhand', cursive;
-            font-size: 1.2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            font-weight: normal;
+            font-family: 'Shrikhand', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             text-align: center;
-            padding: 20px;
-            box-shadow: 0 0 30px rgba(26, 115, 232, 0.5);
-            z-index: 10;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .central-bubble:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-        }
-
-        /* Bulles Satellites */
-        .skill-bubble {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background-color: #1a73e8;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            line-height: 1.2;
             color: white;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 15px;
-            box-shadow: 0 0 20px rgba(26, 115, 232, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 5;
         }
 
-        .skill-bubble:hover {
-            transform: scale(1.1);
-        }
-
-        /* POSITIONNEMENT AVEC 12% D'ÉCART */
-        .skill-bubble[data-skill="sig"] {
-            top: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .skill-bubble[data-skill="langues"] {
-            top: 50%;
-            left: 12%;
-            transform: translateY(-50%);
-        }
-
-        .skill-bubble[data-skill="visualisation"] {
-            top: 50%;
-            right: 12%;
-            transform: translateY(-50%);
-        }
-
-        .skill-bubble[data-skill="analyse"] {
-            bottom: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* État étendu des bulles */
-        .skill-bubble.expanded {
-            width: 300px;
-            height: 300px;
-            border-radius: 20px;
-            z-index: 20;
-            transform: scale(1) !important;
-        }
-
-        .skill-bubble.expanded .content {
+        h1 br {
             display: block;
         }
 
-        .skill-bubble .content {
-            display: none;
+        .box-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 2;
         }
 
-        .skill-bubble .book-image {
-            width: 80px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        .box {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 10px 20px;
+            width: 150px;
+            text-align: center;
+            font-family: 'Shrikhand', cursive;
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            text-decoration: none;
         }
 
-        /* Responsive Design */
+        .box:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
         @media (max-width: 768px) {
-            .skills-container {
-                height: 800px;
+            h1 {
+                font-size: 2rem;
             }
-            
-            .central-bubble {
-                width: 150px;
-                height: 150px;
-                font-size: 1rem;
-            }
-            
-            .skill-bubble {
+
+            .box {
                 width: 120px;
-                height: 120px;
-                font-size: 0.8rem;
-            }
-            
-            .skill-bubble.expanded {
-                width: 250px;
-                height: 250px;
-            }
-            
-            /* Ajustement mobile */
-            .skill-bubble[data-skill="sig"] {
-                top: 10%;
-            }
-            
-            .skill-bubble[data-skill="analyse"] {
-                bottom: 10%;
-            }
-            
-            .skill-bubble[data-skill="langues"] {
-                left: 10%;
-            }
-            
-            .skill-bubble[data-skill="visualisation"] {
-                right: 10%;
+                font-size: 1rem;
             }
         }
 
         @media (max-width: 480px) {
-            .skills-container {
-                height: 700px;
+            h1 {
+                font-size: 1.5rem;
             }
-            
-            .central-bubble {
-                width: 120px;
-                height: 120px;
-                font-size: 0.9rem;
-            }
-            
-            .skill-bubble {
+
+            .box {
                 width: 100px;
-                height: 100px;
-                font-size: 0.7rem;
-                padding: 10px;
-            }
-            
-            .skill-bubble.expanded {
-                width: 200px;
-                height: 200px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Section "Mes compétences" -->
-    <section id="skills-section" class="skills-section">
-        <h2 style="font-family: 'Shrikhand', cursive; color: #1a73e8; font-size: 2.5rem; margin-bottom: 50px;">
-            Mes Compétences
-        </h2>
-        
-        <div class="skills-container">
-            <!-- Bulle Centrale -->
-            <div class="central-bubble" id="centralBubble">
-                Institut Universitaire<br>de Technologie<br>Bordeaux Montaigne
-            </div>
-            
-            <!-- Bulles Satellites -->
-            <div class="skill-bubble" data-skill="sig">
-                SIG et représentation graphique
-                <div class="content">
-                    <img src="https://via.placeholder.com/80x120" alt="Livre SIG" class="book-image">
-                    <img src="https://via.placeholder.com/80x120" alt="Livre Cartographie" class="book-image">
-                </div>
-            </div>
-            
-            <div class="skill-bubble" data-skill="langues">
-                Maîtrise de différentes langues
-                <div class="content">
-                    <img src="https://via.placeholder.com/80x120" alt="Livre Langues" class="book-image">
-                </div>
-            </div>
-            
-            <div class="skill-bubble" data-skill="visualisation">
-                Compétences en visualisation et maîtrise des données
-                <div class="content">
-                    <img src="https://via.placeholder.com/80x120" alt="Livre Data" class="book-image">
-                </div>
-            </div>
-            
-            <div class="skill-bubble" data-skill="analyse">
-                Analyse socio-économique
-                <div class="content">
-                    <img src="https://via.placeholder.com/80x120" alt="Le Suicide d'Emile Durkheim" class="book-image">
-                </div>
-            </div>
+    <!-- Section d'accueil -->
+    <section class="home-section">
+        <div class="video-background">
+            <video autoplay muted loop preload="auto" playsinline poster="background-poster.jpg">
+                <source src="background.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+        </div>
+
+        <div class="name">Marius Brion</div>
+
+        <div class="content">
+            <h1>
+                Étudiant en<br>Villes et Territoires Durables
+            </h1>
+        </div>
+
+        <div class="box-container">
+            <a href="#about-section" class="box">À propos</a>
+            <a href="#creations-section" class="box">Mes créations</a>
+            <a href="#skills-section" class="box">Mes compétences</a>
+            <a href="#me-contacter-section" class="box">Me contacter</a>
         </div>
     </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const centralBubble = document.getElementById('centralBubble');
-            const skillBubbles = document.querySelectorAll('.skill-bubble');
-            
-            // Gestion des clics sur les bulles satellites
-            skillBubbles.forEach(bubble => {
-                bubble.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    // Ferme toutes les autres bulles
-                    skillBubbles.forEach(b => {
-                        if (b !== bubble) b.classList.remove('expanded');
-                    });
-                    
-                    // Ouvre/ferme la bulle cliquée
-                    bubble.classList.toggle('expanded');
-                });
-            });
-            
-            // Clic sur la bulle centrale pour tout fermer
-            centralBubble.addEventListener('click', function() {
-                skillBubbles.forEach(bubble => {
-                    bubble.classList.remove('expanded');
-                });
-            });
-            
-            // Clic en dehors pour fermer
-            document.addEventListener('click', function() {
-                skillBubbles.forEach(bubble => {
-                    bubble.classList.remove('expanded');
-                });
-            });
-        });
-    </script>
 </body>
 </html>
