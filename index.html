@@ -69,6 +69,7 @@
             align-items: center;
             justify-content: center;
             background: #111;
+            z-index: 1; /* Assurer que les médias ne se chevauchent pas */
         }
 
         .media-container video,
@@ -90,6 +91,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            z-index: 2; /* Assurer que le contenu est au-dessus */
         }
 
         .text-element {
@@ -431,11 +433,12 @@
                     }
                 });
 
-                // Animation du média (légère rotation et zoom)
+                // Animation du média (légère rotation et zoom) - SANS CONFLITS AVEC STICKY
                 const media = project.querySelector('.media-container video, .media-container img');
                 if (media && scrollProgress > 0 && scrollProgress < 1) {
-                    const transform = `scale(${1 + scrollProgress * 0.1}) rotate(${scrollProgress * 2}deg)`;
-                    media.style.transform = transform;
+                    const scaleValue = 1 + scrollProgress * 0.05; // Réduction de l'effet
+                    const rotateValue = scrollProgress * 1; // Réduction de la rotation
+                    media.style.transform = `scale(${scaleValue}) rotate(${rotateValue}deg)`;
                 } else if (media) {
                     media.style.transform = 'scale(1) rotate(0deg)';
                 }
@@ -495,17 +498,17 @@
             });
         });
 
-        // Gestion du parallax subtil
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.media-container');
-            
-            parallaxElements.forEach((element, index) => {
-                const speed = 0.5 + (index * 0.1);
-                const yPos = -(scrolled * speed);
-                element.style.transform = `translateY(${yPos}px)`;
-            });
-        });
+        // Gestion du parallax subtil - DÉSACTIVÉ pour éviter les conflits avec sticky
+        // window.addEventListener('scroll', () => {
+        //     const scrolled = window.pageYOffset;
+        //     const parallaxElements = document.querySelectorAll('.media-container');
+        //     
+        //     parallaxElements.forEach((element, index) => {
+        //         const speed = 0.5 + (index * 0.1);
+        //         const yPos = -(scrolled * speed);
+        //         element.style.transform = `translateY(${yPos}px)`;
+        //     });
+        // });
     </script>
 </body>
 </html>
