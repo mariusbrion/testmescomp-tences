@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Style Apple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        .project-section {
+            height: 400vh;
+            position: relative;
+        }
+
+        .project-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .media-container {
+            position: absolute;
+            left: 0;
+            width: 60%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            z-index: 1; /* Assurer que les médias ne se chevauchent pas */
+        }
+
+        .media-container video,
+        .media-container img {
+            width: 90%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: transform 0.8s ease;
+        }
+
+        .content-container {
+            position: absolute;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2; /* Assurer que le contenu est au-dessus */
+        }
+
+        .text-element {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-bottom: 2rem;
+        }
+
+        .text-element.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .project-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .tech-tag {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #667eea;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: fit-content;
+        }
+
+        .project-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Alternance des projets */
+        .project-section:nth-child(even) .media-container {
+            left: auto;
+            right: 0;
+        }
+
+        .project-section:nth-child(even) .content-container {
+            right: auto;
+            left: 0;
+        }
+
+        .project-section:nth-child(even) .text-element {
+            transform: translateX(-50px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .project-container {
+                flex-direction: column;
+            }
+
+            .media-container,
+            .content-container {
+                position: relative;
+                width: 100%;
+                height: 50%;
+            }
+
+            .content-container {
+                padding: 40px 30px;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-section:nth-child(even) .media-container,
+            .project-section:nth-child(even) .content-container {
+                left: auto;
+                right: auto;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <section class="hero">
+        <h1>Mon Portfolio</h1>
+    </section>
+
+    <!-- Projet 1: CAO -->
+    <section class="project-section" data-project="1">
+        <div class="project-container">
+            <div class="media-container">
+                <video autoplay muted loop playsinline>
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                    <!-- Fallback si les vidéos ne chargent pas -->
+                    <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #1e3c72, #2a5298); display: flex; align-items: center; justify-content: center; border-radius: 20px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔧</div>
+                            <div style="font-size: 1.5rem; color: #fff;">Projet CAO</div>
+                        </div>
+                    </div>
+                </video>
+            </div>
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">Conception CAO Avancée</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Modélisation 3D & Prototypage</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Développement d'un système de modélisation 3D complexe avec simulation en temps réel. 
+                        Ce projet intègre des algorithmes d'optimisation pour la génération automatique de pièces mécaniques.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        L'interface intuitive permet aux ingénieurs de créer rapidement des prototypes virtuels 
+                        avec validation structurelle instantanée.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">SolidWorks</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">OpenGL</span>
+                        <span class="tech-tag">C++</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Voir le projet →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projet 2: Application Web -->
+    <section class="project-section" data-project="2">
+        <div class="project-container">
+            <div class="media-container">
+                <img src="https://picsum.photos/800/600?random=2" alt="Application Web" loading="lazy">
+            </div>
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">Application Web Progressive</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Interface Moderne & Réactive</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Création d'une application web progressive avec une architecture microservices. 
+                        Interface utilisateur moderne avec animations fluides et expérience optimisée.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        Intégration d'APIs REST, authentification sécurisée et tableau de bord analytique 
+                        en temps réel pour le suivi des performances.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Découvrir →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projet 3: Intelligence Artificielle -->
+    <section class="project-section" data-project="3">
+        <div class="project-container">
+            <div class="media-container">
+                <video autoplay muted loop playsinline>
+                    <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    <!-- Fallback avec image si vidéo ne charge pas -->
+                    <img src="https://picsum.photos/800/600?random=3" alt="Intelligence Artificielle" style="width: 90%; height: 80%; object-fit: cover; border-radius: 20px;">
+                </video>
+            </div>
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">IA & Machine Learning</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Algorithmes Prédictifs Avancés</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Développement d'un système d'intelligence artificielle pour l'analyse prédictive 
+                        de données complexes avec apprentissage en temps réel.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        Implémentation de réseaux de neurones profonds avec optimisation GPU 
+                        pour traitement de grandes volumétries de données.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">CUDA</span>
+                        <span class="tech-tag">Jupyter</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Explorer →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Gestion du loading
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('fade-out');
+            }, 1500);
+        });
+
+        // Animation des éléments texte au scroll
+        function handleScrollAnimations() {
+            const projects = document.querySelectorAll('.project-section');
+            
+            projects.forEach((project, projectIndex) => {
+                const rect = project.getBoundingClientRect();
+                const projectHeight = project.offsetHeight;
+                const viewportHeight = window.innerHeight;
+                
+                // Calculer la progression dans la section
+                const scrollProgress = Math.max(0, Math.min(1, 
+                    (-rect.top) / (projectHeight - viewportHeight)
+                ));
+                
+                const textElements = project.querySelectorAll('.text-element');
+                const totalElements = textElements.length;
+                
+                textElements.forEach((element, index) => {
+                    const delay = parseInt(element.dataset.delay) || 0;
+                    const elementProgress = (scrollProgress * totalElements) - delay;
+                    
+                    if (elementProgress >= 0) {
+                        element.classList.add('visible');
+                        // Animation de délai progressif
+                        element.style.transitionDelay = `${delay * 0.2}s`;
+                    } else {
+                        element.classList.remove('visible');
+                    }
+                });
+
+                // Animation du média (légère rotation et zoom) - SANS CONFLITS AVEC STICKY
+                const media = project.querySelector('.media-container video, .media-container img');
+                if (media && scrollProgress > 0 && scrollProgress < 1) {
+                    const scaleValue = 1 + scrollProgress * 0.05; // Réduction de l'effet
+                    const rotateValue = scrollProgress * 1; // Réduction de la rotation
+                    media.style.transform = `scale(${scaleValue}) rotate(${rotateValue}deg)`;
+                } else if (media) {
+                    media.style.transform = 'scale(1) rotate(0deg)';
+                }
+            });
+        }
+
+        // Optimisation du scroll avec throttling
+        let ticking = false;
+        function optimizedScrollHandler() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScrollAnimations();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', optimizedScrollHandler);
+        
+        // Animation initiale
+        handleScrollAnimations();
+
+        // Intersection Observer pour des performances optimales
+        const observerOptions = {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+            rootMargin: '0px'
+        };
+
+        const projectObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Ajouter des classes spéciales pour les projets visibles
+                    entry.target.classList.add('in-viewport');
+                } else {
+                    entry.target.classList.remove('in-viewport');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les projets
+        document.querySelectorAll('.project-section').forEach(project => {
+            projectObserver.observe(project);
+        });
+
+        // Smooth scroll pour les liens internes
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Gestion du parallax subtil - DÉSACTIVÉ pour éviter les conflits avec sticky
+        // window.addEventListener('scroll', () => {
+        //     const scrolled = window.pageYOffset;
+        //     const parallaxElements = document.querySelectorAll('.media-container');
+        //     
+        //     parallaxElements.forEach((element, index) => {
+        //         const speed = 0.5 + (index * 0.1);
+        //         const yPos = -(scrolled * speed);
+        //         element.style.transform = `translateY(${yPos}px)`;
+        //     });
+        // });
+    </script>
+</body>
+</html>
