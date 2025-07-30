@@ -364,6 +364,61 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Link Preview Styles */
+        .link-preview {
+            position: relative;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .link-preview:hover {
+            border-bottom-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .preview-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px solid #e5e5e7;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-tooltip.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .preview-tooltip img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .preview-tooltip::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+
         /* Transition fluide entre sites */
         .site-transition {
             position: fixed;
@@ -515,12 +570,12 @@
                 <div class="text-element" data-delay="2">
                     <p class="project-description">
                         Développement d'un système d'intelligence artificielle pour l'analyse prédictive 
-                        de données complexes avec apprentissage en temps réel.
+                        de données complexes avec <span class="link-preview" data-preview="https://picsum.photos/300/200?random=ai1">apprentissage en temps réel</span>.
                     </p>
                 </div>
                 <div class="text-element" data-delay="3">
                     <p class="project-description">
-                        Implémentation de réseaux de neurones profonds avec optimisation GPU 
+                        Implémentation de <span class="link-preview" data-preview="https://picsum.photos/300/200?random=ai2">réseaux de neurones profonds</span> avec optimisation GPU 
                         pour traitement de grandes volumétries de données.
                     </p>
                 </div>
@@ -708,6 +763,65 @@
                     });
                 }
             });
+        });
+
+        // Link Preview Functionality
+        function initLinkPreviews() {
+            const linkPreviews = document.querySelectorAll('.link-preview');
+            
+            linkPreviews.forEach(link => {
+                const previewUrl = link.dataset.preview;
+                let tooltip = null;
+                let hoverTimeout = null;
+                
+                // Créer le tooltip
+                function createTooltip() {
+                    tooltip = document.createElement('div');
+                    tooltip.className = 'preview-tooltip';
+                    
+                    const img = document.createElement('img');
+                    img.src = previewUrl;
+                    img.alt = 'Preview';
+                    img.loading = 'lazy';
+                    
+                    tooltip.appendChild(img);
+                    link.appendChild(tooltip);
+                }
+                
+                // Hover enter
+                link.addEventListener('mouseenter', () => {
+                    if (!tooltip) {
+                        createTooltip();
+                    }
+                    
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(() => {
+                        tooltip.classList.add('show');
+                    }, 300); // Délai de 300ms comme Tailwind
+                });
+                
+                // Hover leave
+                link.addEventListener('mouseleave', () => {
+                    clearTimeout(hoverTimeout);
+                    if (tooltip) {
+                        tooltip.classList.remove('show');
+                    }
+                });
+                
+                // Animation de suivi de la souris (subtile)
+                link.addEventListener('mousemove', (e) => {
+                    if (tooltip && tooltip.classList.contains('show')) {
+                        const rect = link.getBoundingClientRect();
+                        const offsetX = (e.clientX - rect.left - rect.width / 2) * 0.1;
+                        tooltip.style.transform = `translateX(calc(-50% + ${offsetX}px)) translateY(-5px)`;
+                    }
+                });
+            });
+        }
+        
+        // Initialiser les previews après le chargement
+        window.addEventListener('load', () => {
+            setTimeout(initLinkPreviews, 500);
         });
     </script>
 </body>
