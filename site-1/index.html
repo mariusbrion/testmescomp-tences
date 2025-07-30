@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Style Apple</title>
+    <title>Portfolio - Accueil & Projets</title>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            color: #fff;
+            background: #f8f9fa;
+            color: #1d1d1f;
             overflow-x: hidden;
         }
 
@@ -31,8 +31,19 @@
             font-size: 4rem;
             font-weight: 300;
             text-align: center;
+            color: white;
             opacity: 0;
             animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.3s forwards;
         }
 
         @keyframes fadeInUp {
@@ -58,6 +69,7 @@
             display: flex;
             align-items: center;
             overflow: hidden;
+            background: #f8f9fa;
         }
 
         .media-container {
@@ -68,8 +80,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #111;
-            z-index: 1; /* Assurer que les médias ne se chevauchent pas */
+            background: transparent; /* Suppression du fond gris */
+            z-index: 1;
         }
 
         .media-container video,
@@ -78,7 +90,7 @@
             height: 80%;
             object-fit: cover;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15); /* Ombre plus subtile */
             transition: transform 0.8s ease;
         }
 
@@ -91,7 +103,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            z-index: 2; /* Assurer que le contenu est au-dessus */
+            z-index: 2;
+            background: transparent;
         }
 
         .text-element {
@@ -118,7 +131,7 @@
 
         .project-subtitle {
             font-size: 1.2rem;
-            color: #888;
+            color: #86868b;
             font-weight: 300;
             margin-bottom: 2rem;
         }
@@ -126,7 +139,7 @@
         .project-description {
             font-size: 1.1rem;
             line-height: 1.6;
-            color: #ccc;
+            color: #1d1d1f;
             margin-bottom: 1.5rem;
         }
 
@@ -138,8 +151,8 @@
         }
 
         .tech-tag {
-            background: rgba(102, 126, 234, 0.2);
-            border: 1px solid rgba(102, 126, 234, 0.4);
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
@@ -179,6 +192,108 @@
             transform: translateX(-50px);
         }
 
+        /* Section de transition vers le site suivant */
+        .transition-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transition-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+
+        .transition-title {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .transition-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .next-site-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 40px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            backdrop-filter: blur(10px);
+        }
+
+        .next-site-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+
+        /* Animation de fond pour la transition */
+        .transition-bg {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -20px) rotate(180deg); }
+        }
+
+        /* Auto-scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-indicator.show {
+            opacity: 1;
+        }
+
+        .scroll-arrow {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -204,16 +319,15 @@
                 font-size: 2rem;
             }
 
+            .transition-title {
+                font-size: 2rem;
+            }
+
             .project-section:nth-child(even) .media-container,
             .project-section:nth-child(even) .content-container {
                 left: auto;
                 right: auto;
             }
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
         }
 
         /* Loading animation */
@@ -223,7 +337,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -239,7 +353,7 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 3px solid #333;
+            border: 3px solid #e5e5e7;
             border-top: 3px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -249,6 +363,37 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Transition fluide entre sites */
+        .site-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        .site-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .transition-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -256,8 +401,15 @@
         <div class="spinner"></div>
     </div>
 
+    <div class="site-transition" id="siteTransition">
+        <div class="transition-spinner"></div>
+    </div>
+
     <section class="hero">
-        <h1>Mon Portfolio</h1>
+        <div>
+            <h1>Mon Portfolio</h1>
+            <p class="hero-subtitle">Développeur Full-Stack & Designer</p>
+        </div>
     </section>
 
     <!-- Projet 1: CAO -->
@@ -267,13 +419,6 @@
                 <video autoplay muted loop playsinline>
                     <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
                     <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
-                    <!-- Fallback si les vidéos ne chargent pas -->
-                    <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #1e3c72, #2a5298); display: flex; align-items: center; justify-content: center; border-radius: 20px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔧</div>
-                            <div style="font-size: 1.5rem; color: #fff;">Projet CAO</div>
-                        </div>
-                    </div>
                 </video>
             </div>
             <div class="content-container">
@@ -357,7 +502,6 @@
                 <video autoplay muted loop playsinline>
                     <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4">
                     <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    <!-- Fallback avec image si vidéo ne charge pas -->
                     <img src="https://picsum.photos/800/600?random=3" alt="Intelligence Artificielle" style="width: 90%; height: 80%; object-fit: cover; border-radius: 20px;">
                 </video>
             </div>
@@ -395,7 +539,32 @@
         </div>
     </section>
 
+    <!-- Section de transition vers le site suivant -->
+    <section class="transition-section">
+        <div class="transition-bg"></div>
+        <div class="transition-content">
+            <h2 class="transition-title">À propos de moi</h2>
+            <p class="transition-subtitle">Découvrez mon parcours et ma passion pour la technologie</p>
+            <a href="#" class="next-site-btn" id="nextSiteBtn">Continuer l'exploration →</a>
+        </div>
+    </section>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div>Faites défiler pour continuer</div>
+        <div class="scroll-arrow">↓</div>
+    </div>
+
     <script>
+        // Configuration des sites
+        const sites = [
+            './site-1/index.html', // Site actuel (Accueil + Projets)
+            './site-2/index.html', // À propos
+            './site-3/index.html', // Compétences
+            './site-4/index.html'  // Contact
+        ];
+        
+        let currentSiteIndex = 0;
+
         // Gestion du loading
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -412,7 +581,6 @@
                 const projectHeight = project.offsetHeight;
                 const viewportHeight = window.innerHeight;
                 
-                // Calculer la progression dans la section
                 const scrollProgress = Math.max(0, Math.min(1, 
                     (-rect.top) / (projectHeight - viewportHeight)
                 ));
@@ -426,23 +594,63 @@
                     
                     if (elementProgress >= 0) {
                         element.classList.add('visible');
-                        // Animation de délai progressif
                         element.style.transitionDelay = `${delay * 0.2}s`;
                     } else {
                         element.classList.remove('visible');
                     }
                 });
 
-                // Animation du média (légère rotation et zoom) - SANS CONFLITS AVEC STICKY
+                // Animation subtile du média
                 const media = project.querySelector('.media-container video, .media-container img');
                 if (media && scrollProgress > 0 && scrollProgress < 1) {
-                    const scaleValue = 1 + scrollProgress * 0.05; // Réduction de l'effet
-                    const rotateValue = scrollProgress * 1; // Réduction de la rotation
+                    const scaleValue = 1 + scrollProgress * 0.03;
+                    const rotateValue = scrollProgress * 0.5;
                     media.style.transform = `scale(${scaleValue}) rotate(${rotateValue}deg)`;
                 } else if (media) {
                     media.style.transform = 'scale(1) rotate(0deg)';
                 }
             });
+        }
+
+        // Gestion de la transition automatique vers le site suivant
+        function handleSiteTransition() {
+            const transitionSection = document.querySelector('.transition-section');
+            const rect = transitionSection.getBoundingClientRect();
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            
+            // Afficher l'indicateur de scroll quand on arrive à la section de transition
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                scrollIndicator.classList.add('show');
+                
+                // Auto-transition quand on atteint 80% de la section
+                const sectionProgress = (-rect.top) / (transitionSection.offsetHeight - window.innerHeight);
+                if (sectionProgress >= 0.8) {
+                    navigateToNextSite();
+                }
+            } else {
+                scrollIndicator.classList.remove('show');
+            }
+        }
+
+        // Navigation vers le site suivant
+        function navigateToNextSite() {
+            const nextIndex = currentSiteIndex + 1;
+            if (nextIndex < sites.length) {
+                const siteTransition = document.getElementById('siteTransition');
+                siteTransition.classList.add('active');
+                
+                setTimeout(() => {
+                    // Ici vous redirigeriez vers le site suivant
+                    // window.location.href = sites[nextIndex];
+                    console.log(`Navigation vers: ${sites[nextIndex]}`);
+                    
+                    // Pour la démo, on simule le chargement
+                    setTimeout(() => {
+                        siteTransition.classList.remove('active');
+                        // En production, cette ligne ne sera pas nécessaire car on change de page
+                    }, 2000);
+                }, 800);
+            }
         }
 
         // Optimisation du scroll avec throttling
@@ -451,13 +659,19 @@
             if (!ticking) {
                 requestAnimationFrame(() => {
                     handleScrollAnimations();
+                    handleSiteTransition();
                     ticking = false;
                 });
                 ticking = true;
             }
         }
 
+        // Event listeners
         window.addEventListener('scroll', optimizedScrollHandler);
+        document.getElementById('nextSiteBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateToNextSite();
+        });
         
         // Animation initiale
         handleScrollAnimations();
@@ -471,7 +685,6 @@
         const projectObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Ajouter des classes spéciales pour les projets visibles
                     entry.target.classList.add('in-viewport');
                 } else {
                     entry.target.classList.remove('in-viewport');
@@ -479,7 +692,6 @@
             });
         }, observerOptions);
 
-        // Observer tous les projets
         document.querySelectorAll('.project-section').forEach(project => {
             projectObserver.observe(project);
         });
@@ -497,18 +709,6 @@
                 }
             });
         });
-
-        // Gestion du parallax subtil - DÉSACTIVÉ pour éviter les conflits avec sticky
-        // window.addEventListener('scroll', () => {
-        //     const scrolled = window.pageYOffset;
-        //     const parallaxElements = document.querySelectorAll('.media-container');
-        //     
-        //     parallaxElements.forEach((element, index) => {
-        //         const speed = 0.5 + (index * 0.1);
-        //         const yPos = -(scrolled * speed);
-        //         element.style.transform = `translateY(${yPos}px)`;
-        //     });
-        // });
     </script>
 </body>
 </html>
