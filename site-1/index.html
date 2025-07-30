@@ -1,13 +1,4 @@
-// Gestion du loading initial
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loading').classList.add('fade-out');
-                detectCurrentSite();
-                preloadPages();
-                // Initialiser les effets threads après le chargement
-                setTimeout(initThreadsEffects, 500);
-            }, 1000);
-        });<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -140,25 +131,7 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            background: white;
-            position: relative;
-        }
-        
-        /* Canvas WebGL pour l'effet threads */
-        .threads-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .threads-canvas {
-            width: 100%;
-            height: 100%;
-            opacity: 0.3;
+            background: #f8f9fa;
         }
         .media-container {
             position: absolute;
@@ -557,9 +530,6 @@
     
     <section class="project-section" data-project="1">
         <div class="project-container">
-            <div class="threads-background">
-                <canvas class="threads-canvas" id="threadsCanvas1"></canvas>
-            </div>
             <div class="media-container">
                 <video autoplay muted loop playsinline>
                     <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
@@ -602,9 +572,6 @@
     
     <section class="project-section" data-project="2">
         <div class="project-container">
-            <div class="threads-background">
-                <canvas class="threads-canvas" id="threadsCanvas2"></canvas>
-            </div>
             <div class="media-container">
                 <img src="https://picsum.photos/800/600?random=2" alt="Application Web" loading="lazy">
             </div>
@@ -644,9 +611,6 @@
     
     <section class="project-section" data-project="3">
         <div class="project-container">
-            <div class="threads-background">
-                <canvas class="threads-canvas" id="threadsCanvas3"></canvas>
-            </div>
             <div class="media-container">
                 <video autoplay muted loop playsinline>
                     <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4">
@@ -705,298 +669,6 @@
     </div>
     
     <script>
-        // Shaders pour l'effet threads
-        const vertexShader = `
-            attribute vec2 position;
-            attribute vec2 uv;
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = vec4(position, 0.0, 1.0);
-            }
-        `;
-        
-        const fragmentShader = `
-            precision highp float;
-            
-            uniform float iTime;
-            uniform vec3 iResolution;
-            uniform vec3 uColor;
-            uniform float uAmplitude;
-            uniform float uDistance;
-            uniform vec2 uMouse;
-            
-            #define PI 3.1415926538
-            
-            const int u_line_count = 25;
-            const float u_line_width = 4.0;
-            const float u_line_blur = 8.0;
-            
-            float Perlin2D(vec2 P) {
-                vec2 Pi = floor(P);
-                vec4 Pf_Pfmin1 = P.xyxy - vec4(Pi, Pi + 1.0);
-                vec4 Pt = vec4(Pi.xy, Pi.xy + 1.0);
-                Pt = Pt - floor(Pt * (1.0 / 71.0)) * 71.0;
-                Pt += vec2(26.0, 161.0).xyxy;
-                Pt *= Pt;
-                Pt = Pt.xzxz * Pt.yyww;
-                vec4 hash_x = fract(Pt * (1.0 / 951.135664));
-                vec4 hash_y = fract(Pt * (1.0 / 642.949883));
-                vec4 grad_x = hash_x - 0.49999;
-                vec4 grad_y = hash_y - 0.49999;
-                vec4 grad_results = inversesqrt(grad_x * grad_x + grad_y * grad_y)
-                    * (grad_x * Pf_Pfmin1.xzxz + grad_y * Pf_Pfmin1.yyww);
-                grad_results *= 1.4142135623730950;
-                vec2 blend = Pf_Pfmin1.xy * Pf_Pfmin1.xy * Pf_Pfmin1.xy
-                           * (Pf_Pfmin1.xy * (Pf_Pfmin1.xy * 6.0 - 15.0) + 10.0);
-                vec4 blend2 = vec4(blend, vec2(1.0 - blend));
-                return dot(grad_results, blend2.zxzx * blend2.wwyy);
-            }
-            
-            float pixel(float count, vec2 resolution) {
-                return (1.0 / max(resolution.x, resolution.y)) * count;
-            }
-            
-            float lineFn(vec2 st, float width, float perc, float offset, vec2 mouse, float time, float amplitude, float distance) {
-                float split_offset = (perc * 0.4);
-                float split_point = 0.1 + split_offset;
-                
-                float amplitude_normal = smoothstep(split_point, 0.7, st.x);
-                float amplitude_strength = 0.3;
-                float finalAmplitude = amplitude_normal * amplitude_strength * amplitude;
-                
-                float time_scaled = time / 15.0;
-                float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
-                
-                float xnoise = mix(
-                    Perlin2D(vec2(time_scaled, st.x + perc) * 2.0),
-                    Perlin2D(vec2(time_scaled, st.x + time_scaled) * 2.8) / 1.2,
-                    st.x * 0.2
-                );
-                
-                float y = 0.5 + (perc - 0.5) * distance + xnoise / 2.0 * finalAmplitude;
-                
-                float line_start = smoothstep(
-                    y + (width / 2.0) + (u_line_blur * pixel(1.0, iResolution.xy) * blur),
-                    y,
-                    st.y
-                );
-                
-                float line_end = smoothstep(
-                    y,
-                    y - (width / 2.0) - (u_line_blur * pixel(1.0, iResolution.xy) * blur),
-                    st.y
-                );
-                
-                return clamp(
-                    (line_start - line_end) * (1.0 - smoothstep(0.0, 1.0, pow(perc, 0.3))),
-                    0.0,
-                    1.0
-                );
-            }
-            
-            void main() {
-                vec2 uv = gl_FragCoord.xy / iResolution.xy;
-                
-                float line_strength = 1.0;
-                for (int i = 0; i < u_line_count; i++) {
-                    float p = float(i) / float(u_line_count);
-                    line_strength *= (1.0 - lineFn(
-                        uv,
-                        u_line_width * pixel(1.0, iResolution.xy) * (1.0 - p * 0.3),
-                        p,
-                        (PI * 1.0) * p,
-                        uMouse,
-                        iTime,
-                        uAmplitude,
-                        uDistance
-                    ));
-                }
-                
-                float colorVal = 1.0 - line_strength;
-                gl_FragColor = vec4(uColor * colorVal, colorVal);
-            }
-        `;
-        
-        // Classe pour gérer l'effet threads
-        class ThreadsEffect {
-            constructor(canvas, options = {}) {
-                this.canvas = canvas;
-                this.options = {
-                    color: [0.0, 0.0, 0.0], // Noir
-                    amplitude: 0.8,
-                    distance: 0.1,
-                    enableMouseInteraction: true,
-                    ...options
-                };
-                
-                this.init();
-            }
-            
-            init() {
-                const gl = this.canvas.getContext('webgl') || this.canvas.getContext('experimental-webgl');
-                if (!gl) {
-                    console.warn('WebGL non supporté');
-                    return;
-                }
-                
-                this.gl = gl;
-                this.setupGL();
-                this.createShaders();
-                this.createGeometry();
-                this.setupUniforms();
-                this.setupEventListeners();
-                this.resize();
-                this.animate();
-            }
-            
-            setupGL() {
-                const gl = this.gl;
-                gl.clearColor(1.0, 1.0, 1.0, 0.0);
-                gl.enable(gl.BLEND);
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            }
-            
-            createShaders() {
-                const gl = this.gl;
-                
-                const vertexShaderObj = gl.createShader(gl.VERTEX_SHADER);
-                gl.shaderSource(vertexShaderObj, vertexShader);
-                gl.compileShader(vertexShaderObj);
-                
-                const fragmentShaderObj = gl.createShader(gl.FRAGMENT_SHADER);
-                gl.shaderSource(fragmentShaderObj, fragmentShader);
-                gl.compileShader(fragmentShaderObj);
-                
-                this.program = gl.createProgram();
-                gl.attachShader(this.program, vertexShaderObj);
-                gl.attachShader(this.program, fragmentShaderObj);
-                gl.linkProgram(this.program);
-                gl.useProgram(this.program);
-            }
-            
-            createGeometry() {
-                const gl = this.gl;
-                
-                const vertices = new Float32Array([
-                    -1, -1, 0, 1,
-                     3, -1, 2, 1,
-                    -1,  3, 0, -1
-                ]);
-                
-                const buffer = gl.createBuffer();
-                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-                
-                const positionLocation = gl.getAttribLocation(this.program, 'position');
-                const uvLocation = gl.getAttribLocation(this.program, 'uv');
-                
-                gl.enableVertexAttribArray(positionLocation);
-                gl.enableVertexAttribArray(uvLocation);
-                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 16, 0);
-                gl.vertexAttribPointer(uvLocation, 2, gl.FLOAT, false, 16, 8);
-            }
-            
-            setupUniforms() {
-                const gl = this.gl;
-                
-                this.uniforms = {
-                    iTime: gl.getUniformLocation(this.program, 'iTime'),
-                    iResolution: gl.getUniformLocation(this.program, 'iResolution'),
-                    uColor: gl.getUniformLocation(this.program, 'uColor'),
-                    uAmplitude: gl.getUniformLocation(this.program, 'uAmplitude'),
-                    uDistance: gl.getUniformLocation(this.program, 'uDistance'),
-                    uMouse: gl.getUniformLocation(this.program, 'uMouse')
-                };
-                
-                gl.uniform3f(this.uniforms.uColor, ...this.options.color);
-                gl.uniform1f(this.uniforms.uAmplitude, this.options.amplitude);
-                gl.uniform1f(this.uniforms.uDistance, this.options.distance);
-                gl.uniform2f(this.uniforms.uMouse, 0.5, 0.5);
-                
-                this.currentMouse = [0.5, 0.5];
-                this.targetMouse = [0.5, 0.5];
-            }
-            
-            setupEventListeners() {
-                if (!this.options.enableMouseInteraction) return;
-                
-                this.canvas.addEventListener('mousemove', (e) => {
-                    const rect = this.canvas.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width;
-                    const y = 1.0 - (e.clientY - rect.top) / rect.height;
-                    this.targetMouse = [x, y];
-                });
-                
-                this.canvas.addEventListener('mouseleave', () => {
-                    this.targetMouse = [0.5, 0.5];
-                });
-                
-                window.addEventListener('resize', () => this.resize());
-            }
-            
-            resize() {
-                const rect = this.canvas.getBoundingClientRect();
-                const dpr = window.devicePixelRatio || 1;
-                
-                this.canvas.width = rect.width * dpr;
-                this.canvas.height = rect.height * dpr;
-                this.canvas.style.width = rect.width + 'px';
-                this.canvas.style.height = rect.height + 'px';
-                
-                const gl = this.gl;
-                gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-                gl.uniform3f(this.uniforms.iResolution, this.canvas.width, this.canvas.height, this.canvas.width / this.canvas.height);
-            }
-            
-            animate(time = 0) {
-                const gl = this.gl;
-                
-                // Smooth mouse interpolation
-                const smoothing = 0.05;
-                this.currentMouse[0] += smoothing * (this.targetMouse[0] - this.currentMouse[0]);
-                this.currentMouse[1] += smoothing * (this.targetMouse[1] - this.currentMouse[1]);
-                
-                gl.uniform1f(this.uniforms.iTime, time * 0.001);
-                gl.uniform2f(this.uniforms.uMouse, this.currentMouse[0], this.currentMouse[1]);
-                
-                gl.clear(gl.COLOR_BUFFER_BIT);
-                gl.drawArrays(gl.TRIANGLES, 0, 3);
-                
-                this.animationId = requestAnimationFrame((t) => this.animate(t));
-            }
-            
-            destroy() {
-                if (this.animationId) {
-                    cancelAnimationFrame(this.animationId);
-                }
-                const gl = this.gl;
-                if (gl) {
-                    const ext = gl.getExtension('WEBGL_lose_context');
-                    if (ext) ext.loseContext();
-                }
-            }
-        }
-        
-        // Initialisation des effets threads
-        let threadsEffects = [];
-        
-        function initThreadsEffects() {
-            // Détruire les anciens effets
-            threadsEffects.forEach(effect => effect.destroy());
-            threadsEffects = [];
-            
-            // Créer les nouveaux effets
-            const canvases = document.querySelectorAll('.threads-canvas');
-            canvases.forEach((canvas, index) => {
-                const effect = new ThreadsEffect(canvas, {
-                    amplitude: 0.6 + (index * 0.2),
-                    distance: 0.05 + (index * 0.03),
-                    enableMouseInteraction: true
-                });
-                threadsEffects.push(effect);
-            });
-        }
         // Configuration des sites
         const sites = [
             {
@@ -1361,18 +1033,13 @@
             
             if (isSlowDevice || isLowEnd) {
                 document.body.classList.add('reduced-animations');
-                // Désactiver les effets WebGL sur les appareils faibles
-                document.querySelectorAll('.threads-canvas').forEach(canvas => {
-                    canvas.style.display = 'none';
+                // Désactiver certaines animations coûteuses
+                document.querySelectorAll('video').forEach(video => {
+                    video.muted = true;
+                    video.playbackRate = 0.8;
                 });
-                console.log('Effets WebGL désactivés pour optimiser les performances');
             }
         }
-        
-        // Nettoyage lors du déchargement de la page
-        window.addEventListener('beforeunload', () => {
-            threadsEffects.forEach(effect => effect.destroy());
-        });
         
         // Appliquer les optimisations de performance
         detectPerformance();
@@ -1396,7 +1063,6 @@
         console.log('⌨️ Utilisation des flèches directionnelles pour naviguer');
         console.log('📱 Support des swipes sur mobile');
         console.log('🔄 Préchargement intelligent des pages');
-        console.log('🎨 Effets WebGL threads activés');
     </script>
 </body>
 </html>
