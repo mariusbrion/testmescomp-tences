@@ -361,36 +361,54 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(248, 249, 250, 0.95);
+            backdrop-filter: blur(20px);
             z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.4s ease;
         }
         .site-transition.active {
             opacity: 1;
             pointer-events: all;
         }
-        .transition-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1.2s linear infinite;
-            margin-bottom: 20px;
+        
+        /* Fade overlay minimal */
+        .fade-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .fade-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
         
-        .transition-text {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 300;
+        /* Loading indicator discret */
+        .minimal-loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 10001;
             opacity: 0;
-            animation: fadeInUp 0.5s ease 0.3s forwards;
+            transition: opacity 0.2s ease;
+        }
+        .minimal-loader.show {
+            opacity: 1;
         }
         
         /* Préchargement des pages suivantes */
@@ -496,9 +514,11 @@
         <div class="spinner"></div>
     </div>
     
+    <div class="fade-overlay" id="fadeOverlay"></div>
+    <div class="minimal-loader" id="minimalLoader"></div>
+    
     <div class="site-transition" id="siteTransition">
-        <div class="transition-spinner"></div>
-        <div class="transition-text" id="transitionText">Chargement...</div>
+        <!-- Garde pour compatibilité mais plus utilisé -->
     </div>
     
     <section class="hero">
@@ -707,35 +727,81 @@
             });
         }
         
-        // Navigation vers un site spécifique
-        function navigateToSite(siteIndex, transitionText = 'Chargement...') {
+        // Navigation vers un site spécifique avec transition douce
+        function navigateToSite(siteIndex, immediate = false) {
             if (isTransitioning || siteIndex === currentSiteIndex) return;
             
             isTransitioning = true;
-            const siteTransition = document.getElementById('siteTransition');
-            const transitionTextEl = document.getElementById('transitionText');
+            const fadeOverlay = document.getElementById('fadeOverlay');
+            const minimalLoader = document.getElementById('minimalLoader');
             
-            transitionTextEl.textContent = transitionText;
-            siteTransition.classList.add('active');
-            
-            // Simulation d'une barre de progression
-            simulateProgress(() => {
+            if (!immediate) {
+                // Transition douce avec fade minimal
+                fadeOverlay.classList.add('active');
+                
+                setTimeout(() => {
+                    minimalLoader.classList.add('show');
+                }, 150);
+                
                 setTimeout(() => {
                     window.location.href = sites[siteIndex].url;
-                }, 500);
-            });
+                }, 300);
+            } else {
+                // Navigation immédiate
+                window.location.href = sites[siteIndex].url;
+            }
+        }
+        
+        // Navigation automatique en fin de scroll (plus fluide)
+        let autoTransitionTimeout = null;
+        function handleAutoTransition() {
+            const transitionSection = document.querySelector('.transition-section');
+            const rect = transitionSection.getBoundingClientRect();
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            
+            // Afficher l'indicateur de scroll
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                scrollIndicator.classList.add('show');
+                
+                // Calculer la progression dans la section
+                const sectionProgress = Math.max(0, Math.min(1, 
+                    (window.innerHeight - rect.top) / window.innerHeight
+                ));
+                
+                // Auto-transition douce à 90% de la section
+                if (sectionProgress >= 0.9) {
+                    if (!autoTransitionTimeout && !isTransitioning) {
+                        autoTransitionTimeout = setTimeout(() => {
+                            navigateToNextSite();
+                        }, 800); // Délai pour éviter les transitions trop rapides
+                    }
+                } else {
+                    // Annuler la transition si l'utilisateur remonte
+                    if (autoTransitionTimeout) {
+                        clearTimeout(autoTransitionTimeout);
+                        autoTransitionTimeout = null;
+                    }
+                }
+            } else {
+                scrollIndicator.classList.remove('show');
+                // Nettoyer le timeout si on sort de la section
+                if (autoTransitionTimeout) {
+                    clearTimeout(autoTransitionTimeout);
+                    autoTransitionTimeout = null;
+                }
+            }
         }
         
         // Navigation vers le site suivant
         function navigateToNextSite() {
             const nextIndex = (currentSiteIndex + 1) % sites.length;
-            navigateToSite(nextIndex, `Direction ${sites[nextIndex].title}...`);
+            navigateToSite(nextIndex);
         }
         
         // Navigation vers le site précédent
         function navigateToPrevSite() {
             const prevIndex = (currentSiteIndex - 1 + sites.length) % sites.length;
-            navigateToSite(prevIndex, `Retour à ${sites[prevIndex].title}...`);
+            navigateToSite(prevIndex);
         }
         
         // Simulation de barre de progression
@@ -809,31 +875,9 @@
             });
         }
         
-        // Gestion de la transition automatique
+        // Gestion de la transition automatique (version optimisée)
         function handleSiteTransition() {
-            const transitionSection = document.querySelector('.transition-section');
-            const rect = transitionSection.getBoundingClientRect();
-            const scrollIndicator = document.getElementById('scrollIndicator');
-            
-            // Afficher l'indicateur de scroll quand on arrive à la section de transition
-            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                scrollIndicator.classList.add('show');
-                
-                // Auto-transition quand on atteint 80% de la section finale
-                const sectionProgress = Math.max(0, Math.min(1, 
-                    (window.innerHeight - rect.top) / window.innerHeight
-                ));
-                
-                if (sectionProgress >= 0.8) {
-                    setTimeout(() => {
-                        if (!isTransitioning) {
-                            navigateToNextSite();
-                        }
-                    }, 1000);
-                }
-            } else {
-                scrollIndicator.classList.remove('show');
-            }
+            handleAutoTransition();
         }
         
         // Optimisation du scroll avec throttling
@@ -867,7 +911,7 @@
                 case 'Escape':
                     // Retour au site 1 (accueil)
                     if (currentSiteIndex !== 0) {
-                        navigateToSite(0, 'Retour à l\'accueil...');
+                        navigateToSite(0);
                     }
                     break;
             }
@@ -907,7 +951,7 @@
             if (e.target.classList.contains('nav-dot')) {
                 const siteIndex = parseInt(e.target.dataset.site);
                 if (siteIndex !== currentSiteIndex) {
-                    navigateToSite(siteIndex, `Direction ${sites[siteIndex].title}...`);
+                    navigateToSite(siteIndex);
                 }
             }
         });
@@ -954,9 +998,9 @@
         
         // Gestion de l'historique du navigateur
         window.addEventListener('popstate', (e) => {
-            // Empêcher le retour normal du navigateur et gérer avec notre système
+            // Navigation immédiate pour l'historique
             if (e.state && e.state.siteIndex !== undefined) {
-                navigateToSite(e.state.siteIndex, 'Navigation...');
+                navigateToSite(e.state.siteIndex, true);
             }
         });
         
@@ -1003,12 +1047,13 @@
         // Gestion des erreurs de navigation
         window.addEventListener('error', (e) => {
             console.warn('Erreur de navigation:', e);
-            // En cas d'erreur, réessayer la navigation après un délai
+            // Réinitialiser l'état en cas d'erreur
             if (isTransitioning) {
                 setTimeout(() => {
                     isTransitioning = false;
-                    document.getElementById('siteTransition').classList.remove('active');
-                }, 3000);
+                    document.getElementById('fadeOverlay').classList.remove('active');
+                    document.getElementById('minimalLoader').classList.remove('show');
+                }, 2000);
             }
         });
         
