@@ -3,490 +3,986 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio avec effet Threads</title>
+    <title>Portfolio - Accueil & Projets</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: white;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #1d1d1f;
             overflow-x: hidden;
         }
-
-        .threads-background {
+        
+        /* Navigation fixe entre sites */
+        .site-navigation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.6;
-        }
-
-        /* DEBUG - Visible menu base */
-        .ruler-menu {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 60px;
+            top: 30px;
+            right: 30px;
             z-index: 1000;
-            background: rgba(255, 0, 0, 0.1); /* Debug background */
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: slideInRight 1s ease 2s forwards;
         }
-
-        .threads-canvas {
-            width: 100%;
-            height: 100%;
-        }
-
-        .content {
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
-            z-index: 1;
-            min-height: 100vh;
         }
-
+        
+        .nav-dot.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+        
+        .nav-dot:hover {
+            background: #667eea;
+            transform: scale(1.1);
+        }
+        
+        .nav-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-dot:hover .nav-tooltip {
+            opacity: 1;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
         .hero {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 0 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
         }
-
         .hero h1 {
             font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #111;
+            font-weight: 300;
+            text-align: center;
+            color: white;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
         }
-
-        .hero p {
+        .hero-subtitle {
             font-size: 1.5rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 2rem;
+            font-weight: 300;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.3s forwards;
         }
-
-        /* Menu Design */
-        .ruler-menu {
-            position: fixed;
-            left: 0;
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+        .project-section {
+            height: 400vh;
+            position: relative;
+        }
+        .project-container {
+            position: sticky;
             top: 0;
             height: 100vh;
-            width: 300px;
-            z-index: 1000;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #f8f9fa;
         }
-
-        .menu-container {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        }
-
-        .ruler-lines {
+        .media-container {
             position: absolute;
             left: 0;
-            top: 0;
+            width: 60%;
             height: 100%;
-            width: 100%;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: flex-start;
-            gap: 3px;
-            padding: 20px 0;
-            padding-left: 20px;
+            background: transparent;
+            z-index: 1;
         }
-
-        .ruler-line {
-            height: 2px;
-            background: #999;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
+        .media-container video,
+        .media-container img {
+            width: 90%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: transform 0.8s ease;
         }
-
-        .ruler-line.small {
-            width: 15px;
-        }
-
-        .ruler-line.medium {
-            width: 20px;
-        }
-
-        .ruler-line.large {
-            width: 25px;
-        }
-
-        .ruler-line.nav-item {
-            width: 35px;
-            height: 3px;
-            background: #666;
-        }
-
-        .menu-panel {
+        .content-container {
             position: absolute;
-            left: 60px;
-            top: 0;
-            width: 240px;
+            right: 0;
+            width: 40%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid #e0e0e0;
-            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-            transform: translateX(-240px);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 80px 60px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 2rem;
+            z-index: 2;
+            background: transparent;
         }
-
-        .ruler-menu:hover {
-            width: 300px;
-        }
-
-        .ruler-menu:hover .menu-panel {
-            transform: translateX(0);
-        }
-
-        .ruler-menu:hover .ruler-line.nav-item {
-            width: 40px;
-            background: #333;
-        }
-
-        .ruler-menu:hover .ruler-line.small,
-        .ruler-menu:hover .ruler-line.medium,
-        .ruler-menu:hover .ruler-line.large {
-            opacity: 0.3;
-        }
-
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-item-link {
-            display: block;
-            padding: 1.5rem 0;
-            color: #333;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 500;
-            position: relative;
-            transition: all 0.3s ease;
+        .text-element {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-bottom: 2rem;
         }
-
-        .ruler-menu:hover .nav-item-link {
+        .text-element.visible {
             opacity: 1;
             transform: translateX(0);
         }
-
-        .nav-item-link:nth-child(1) { transition-delay: 0.1s; }
-        .nav-item-link:nth-child(2) { transition-delay: 0.15s; }
-        .nav-item-link:nth-child(3) { transition-delay: 0.2s; }
-        .nav-item-link:nth-child(4) { transition-delay: 0.25s; }
-
-        .nav-item-link:hover {
-            color: #111;
-            transform: translateX(10px);
+        .project-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .nav-item-link::before {
-            content: '';
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 2px;
-            background: #333;
-            transition: width 0.3s ease;
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: #86868b;
+            font-weight: 300;
+            margin-bottom: 2rem;
         }
-
-        .nav-item-link:hover::before {
-            width: 10px;
+        .project-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #1d1d1f;
+            margin-bottom: 1.5rem;
         }
-
-        .cta-button {
-            display: inline-block;
-            background: #111;
-            color: white;
-            padding: 1rem 2rem;
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+        .tech-tag {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #667eea;
+        }
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background 0.3s ease;
+            color: white;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: fit-content;
         }
-
-        .cta-button:hover {
-            background: #333;
+        .project-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
-
+        .project-section:nth-child(odd) .media-container {
+            left: auto;
+            right: 0;
+        }
+        .project-section:nth-child(odd) .content-container {
+            right: auto;
+            left: 0;
+        }
+        .project-section:nth-child(odd) .text-element {
+            transform: translateX(-50px);
+        }
+        .transition-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .transition-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+        .transition-title {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+        .transition-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+        .next-site-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 40px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            backdrop-filter: blur(10px);
+        }
+        .next-site-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+        .transition-bg {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -20px) rotate(180deg); }
+        }
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .scroll-indicator.show {
+            opacity: 1;
+        }
+        .scroll-arrow {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .loading.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e5e5e7;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .site-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(248, 249, 250, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .site-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* Fade overlay minimal */
+        .fade-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .fade-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* Loading indicator discret */
+        .minimal-loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .minimal-loader.show {
+            opacity: 1;
+        }
+        
+        /* Préchargement des pages suivantes */
+        .preload-link {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Barre de progression */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .progress-bar.show {
+            opacity: 1;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
         @media (max-width: 768px) {
+            .site-navigation {
+                top: 20px;
+                right: 20px;
+                padding: 8px;
+            }
+            .nav-dot {
+                width: 10px;
+                height: 10px;
+            }
             .hero h1 {
                 font-size: 2.5rem;
             }
-            
-            .hero p {
-                font-size: 1.2rem;
+            .project-container {
+                flex-direction: column;
             }
-            
-            .section-title {
+            .media-container,
+            .content-container {
+                position: relative;
+                width: 100%;
+                height: 50%;
+            }
+            .content-container {
+                padding: 40px 30px;
+            }
+            .project-title {
                 font-size: 2rem;
             }
-            
-            .projects-grid {
-                grid-template-columns: 1fr;
+            .transition-title {
+                font-size: 2rem;
+            }
+            .project-section:nth-child(odd) .media-container,
+            .project-section:nth-child(odd) .content-container {
+                left: auto;
+                right: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="threads-background">
-        <canvas class="threads-canvas" id="threadsCanvas"></canvas>
+    <!-- Barre de progression -->
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
     </div>
-
-    <div class="content">
-        <section class="hero">
-            <div>
-                <h1>Portfolio Créatif</h1>
-                <p>Découvrez mes projets et réalisations dans un environnement visuel unique</p>
-                <a href="#projects" class="cta-button">Voir mes projets</a>
+    
+    <!-- Navigation entre sites -->
+    <nav class="site-navigation" id="siteNavigation">
+        <div class="nav-dot active" data-site="0">
+            <div class="nav-tooltip">Accueil & Projets</div>
+        </div>
+        <div class="nav-dot" data-site="1">
+            <div class="nav-tooltip">À propos</div>
+        </div>
+        <div class="nav-dot" data-site="2">
+            <div class="nav-tooltip">Compétences</div>
+        </div>
+        <div class="nav-dot" data-site="3">
+            <div class="nav-tooltip">Contact</div>
+        </div>
+    </nav>
+    
+    <!-- Préchargement des pages -->
+    <link rel="prefetch" href="https://mariusbrion.github.io/testmescomp-tences/site-2/index.html" class="preload-link">
+    <link rel="prefetch" href="https://mariusbrion.github.io/testmescomp-tences/site-3/index.html" class="preload-link">
+    <link rel="prefetch" href="https://mariusbrion.github.io/testmescomp-tences/site-4/index.html" class="preload-link">
+    
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+    
+    <div class="fade-overlay" id="fadeOverlay"></div>
+    <div class="minimal-loader" id="minimalLoader"></div>
+    
+    <div class="site-transition" id="siteTransition">
+        <!-- Garde pour compatibilité mais plus utilisé -->
+    </div>
+    
+    <section class="hero">
+        <div>
+            <h1>Mon Portfolio</h1>
+            <p class="hero-subtitle">Développeur Full-Stack & Designer</p>
+        </div>
+    </section>
+    
+    <section class="project-section" data-project="1">
+        <div class="project-container">
+            <div class="media-container">
+                <video autoplay muted loop playsinline>
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                </video>
             </div>
-        </section>
-
-
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">Conception CAO Avancée</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Modélisation 3D & Prototypage</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Développement d'un système de modélisation 3D complexe avec simulation en temps réel. 
+                        Ce projet intègre des algorithmes d'optimisation pour la génération automatique de pièces mécaniques.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        L'interface intuitive permet aux ingénieurs de créer rapidement des prototypes virtuels 
+                        avec validation structurelle instantanée.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">SolidWorks</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">OpenGL</span>
+                        <span class="tech-tag">C++</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Voir le projet →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="project-section" data-project="2">
+        <div class="project-container">
+            <div class="media-container">
+                <img src="https://picsum.photos/800/600?random=2" alt="Application Web" loading="lazy">
+            </div>
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">Application Web Progressive</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Interface Moderne & Réactive</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Création d'une application web progressive avec une architecture microservices. 
+                        Interface utilisateur moderne avec animations fluides et expérience optimisée.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        Intégration d'APIs REST, authentification sécurisée et tableau de bord analytique 
+                        en temps réel pour le suivi des performances.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Découvrir →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="project-section" data-project="3">
+        <div class="project-container">
+            <div class="media-container">
+                <video autoplay muted loop playsinline>
+                    <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    <img src="https://picsum.photos/800/600?random=3" alt="Intelligence Artificielle" style="width: 90%; height: 80%; object-fit: cover; border-radius: 20px;">
+                </video>
+            </div>
+            <div class="content-container">
+                <div class="text-element" data-delay="0">
+                    <h2 class="project-title">IA & Machine Learning</h2>
+                </div>
+                <div class="text-element" data-delay="1">
+                    <p class="project-subtitle">Algorithmes Prédictifs Avancés</p>
+                </div>
+                <div class="text-element" data-delay="2">
+                    <p class="project-description">
+                        Développement d'un système d'intelligence artificielle pour l'analyse prédictive 
+                        de données complexes avec apprentissage en temps réel.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="3">
+                    <p class="project-description">
+                        Implémentation de réseaux de neurones profonds avec optimisation GPU 
+                        pour traitement de grandes volumétries de données.
+                    </p>
+                </div>
+                <div class="text-element" data-delay="4">
+                    <div class="tech-stack">
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">CUDA</span>
+                        <span class="tech-tag">Jupyter</span>
+                    </div>
+                </div>
+                <div class="text-element" data-delay="5">
+                    <a href="#" class="project-link">Explorer →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="transition-section">
+        <div class="transition-bg"></div>
+        <div class="transition-content">
+            <h2 class="transition-title">À propos de moi</h2>
+            <p class="transition-subtitle">Découvrez mon parcours et ma passion pour la technologie</p>
+            <a href="#" class="next-site-btn" onclick="navigateToNextSite(); return false;">
+                Continuer l'exploration →
+            </a>
+        </div>
+    </section>
+    
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div>Faites défiler pour continuer</div>
+        <div class="scroll-arrow">↓</div>
     </div>
-
+    
     <script>
-        // Shader vertex simple
-        const vertexShader = `
-            attribute vec2 position;
-            void main() {
-                gl_Position = vec4(position, 0.0, 1.0);
+        // Configuration des sites
+        const sites = [
+            {
+                url: 'https://mariusbrion.github.io/testmescomp-tences/site-1/index.html',
+                title: 'Accueil & Projets'
+            },
+            {
+                url: 'https://mariusbrion.github.io/testmescomp-tences/site-2/index.html',
+                title: 'À propos'
+            },
+            {
+                url: 'https://mariusbrion.github.io/testmescomp-tences/site-3/index.html',
+                title: 'Compétences'
+            },
+            {
+                url: 'https://mariusbrion.github.io/testmescomp-tences/site-4/index.html',
+                title: 'Contact'
             }
-        `;
-
-        // Shader fragment pour l'effet threads
-        const fragmentShader = `
-            precision highp float;
-            
-            uniform float iTime;
-            uniform vec3 iResolution;
-            
-            #define PI 3.1415926538
-            
-            const int u_line_count = 40;
-            const float u_line_width = 7.0;
-            const float u_line_blur = 10.0;
-            
-            float Perlin2D(vec2 P) {
-                vec2 Pi = floor(P);
-                vec4 Pf_Pfmin1 = P.xyxy - vec4(Pi, Pi + 1.0);
-                vec4 Pt = vec4(Pi.xy, Pi.xy + 1.0);
-                Pt = Pt - floor(Pt * (1.0 / 71.0)) * 71.0;
-                Pt += vec2(26.0, 161.0).xyxy;
-                Pt *= Pt;
-                Pt = Pt.xzxz * Pt.yyww;
-                vec4 hash_x = fract(Pt * (1.0 / 951.135664));
-                vec4 hash_y = fract(Pt * (1.0 / 642.949883));
-                vec4 grad_x = hash_x - 0.49999;
-                vec4 grad_y = hash_y - 0.49999;
-                vec4 grad_results = inversesqrt(grad_x * grad_x + grad_y * grad_y)
-                    * (grad_x * Pf_Pfmin1.xzxz + grad_y * Pf_Pfmin1.yyww);
-                grad_results *= 1.4142135623730950;
-                vec2 blend = Pf_Pfmin1.xy * Pf_Pfmin1.xy * Pf_Pfmin1.xy
-                           * (Pf_Pfmin1.xy * (Pf_Pfmin1.xy * 6.0 - 15.0) + 10.0);
-                vec4 blend2 = vec4(blend, vec2(1.0 - blend));
-                return dot(grad_results, blend2.zxzx * blend2.wwyy);
-            }
-            
-            float pixel(float count, vec2 resolution) {
-                return (1.0 / max(resolution.x, resolution.y)) * count;
-            }
-            
-            float lineFn(vec2 st, float width, float perc, float offset, float time) {
-                float split_offset = (perc * 0.4);
-                float split_point = 0.1 + split_offset;
-                
-                float amplitude_normal = smoothstep(split_point, 0.7, st.x);
-                float amplitude_strength = 0.5;
-                float finalAmplitude = amplitude_normal * amplitude_strength * 1.0;
-                
-                float time_scaled = time / 10.0;
-                float blur = smoothstep(split_point, split_point + 0.05, st.x) * perc;
-                
-                float xnoise = mix(
-                    Perlin2D(vec2(time_scaled, st.x + perc) * 2.5),
-                    Perlin2D(vec2(time_scaled, st.x + time_scaled) * 3.5) / 1.5,
-                    st.x * 0.3
-                );
-                
-                float y = 0.5 + (perc - 0.5) * 0.0 + xnoise / 2.0 * finalAmplitude;
-                
-                float line_start = smoothstep(
-                    y + (width / 2.0) + (u_line_blur * pixel(1.0, iResolution.xy) * blur),
-                    y,
-                    st.y
-                );
-                
-                float line_end = smoothstep(
-                    y,
-                    y - (width / 2.0) - (u_line_blur * pixel(1.0, iResolution.xy) * blur),
-                    st.y
-                );
-                
-                return clamp(
-                    (line_start - line_end) * (1.0 - smoothstep(0.0, 1.0, pow(perc, 0.3))),
-                    0.0,
-                    1.0
-                );
-            }
-            
-            void main() {
-                vec2 uv = gl_FragCoord.xy / iResolution.xy;
-                
-                float line_strength = 1.0;
-                for (int i = 0; i < u_line_count; i++) {
-                    float p = float(i) / float(u_line_count);
-                    line_strength *= (1.0 - lineFn(
-                        uv,
-                        u_line_width * pixel(1.0, iResolution.xy) * (1.0 - p),
-                        p,
-                        (PI * 1.0) * p,
-                        iTime
-                    ));
+        ];
+        
+        let currentSiteIndex = 0;
+        let isTransitioning = false;
+        
+        // Détection automatique du site actuel basé sur l'URL
+        function detectCurrentSite() {
+            const currentUrl = window.location.href;
+            sites.forEach((site, index) => {
+                if (currentUrl.includes(`site-${index + 1}`) || (index === 0 && !currentUrl.includes('site-'))) {
+                    currentSiteIndex = index;
                 }
-                
-                float colorVal = 1.0 - line_strength;
-                // Inversion des couleurs : fond blanc, lignes noires
-                gl_FragColor = vec4(vec3(0.0) * colorVal, colorVal);
-            }
-        `;
-
-        class ThreadsBackground {
-            constructor(canvas) {
-                this.canvas = canvas;
-                this.gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                
-                if (!this.gl) {
-                    console.error('WebGL not supported');
-                    return;
+            });
+            updateNavigation();
+        }
+        
+        // Mise à jour de la navigation
+        function updateNavigation() {
+            const navDots = document.querySelectorAll('.nav-dot');
+            navDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSiteIndex);
+            });
+        }
+        
+        // Préchargement intelligent des pages
+        function preloadPages() {
+            const nextIndex = (currentSiteIndex + 1) % sites.length;
+            const prevIndex = (currentSiteIndex - 1 + sites.length) % sites.length;
+            
+            // Précharger la page suivante et précédente
+            [nextIndex, prevIndex].forEach(index => {
+                if (index !== currentSiteIndex) {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = sites[index].url;
+                    document.head.appendChild(link);
                 }
-                
-                this.init();
-                this.resize();
-                this.animate();
-                
-                window.addEventListener('resize', () => this.resize());
-            }
+            });
+        }
+        
+        // Navigation vers un site spécifique avec transition douce
+        function navigateToSite(siteIndex, immediate = false) {
+            if (isTransitioning || siteIndex === currentSiteIndex) return;
             
-            init() {
-                const gl = this.gl;
-                
-                // Compilation des shaders
-                const vertShader = this.createShader(gl.VERTEX_SHADER, vertexShader);
-                const fragShader = this.createShader(gl.FRAGMENT_SHADER, fragmentShader);
-                
-                // Création du programme
-                this.program = gl.createProgram();
-                gl.attachShader(this.program, vertShader);
-                gl.attachShader(this.program, fragShader);
-                gl.linkProgram(this.program);
-                
-                if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-                    console.error('Program link error:', gl.getProgramInfoLog(this.program));
-                }
-                
-                // Création de la géométrie (triangle plein écran)
-                const vertices = new Float32Array([
-                    -1, -1,
-                     3, -1,
-                    -1,  3
-                ]);
-                
-                this.buffer = gl.createBuffer();
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-                
-                // Obtention des emplacements des uniformes
-                this.uniforms = {
-                    iTime: gl.getUniformLocation(this.program, 'iTime'),
-                    iResolution: gl.getUniformLocation(this.program, 'iResolution')
-                };
-                
-                // Configuration WebGL
-                gl.enable(gl.BLEND);
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                gl.clearColor(1, 1, 1, 1); // Fond blanc
-            }
+            isTransitioning = true;
+            const fadeOverlay = document.getElementById('fadeOverlay');
+            const minimalLoader = document.getElementById('minimalLoader');
             
-            createShader(type, source) {
-                const gl = this.gl;
-                const shader = gl.createShader(type);
-                gl.shaderSource(shader, source);
-                gl.compileShader(shader);
+            if (!immediate) {
+                // Transition douce avec fade minimal
+                fadeOverlay.classList.add('active');
                 
-                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    console.error('Shader compile error:', gl.getShaderInfoLog(shader));
-                    gl.deleteShader(shader);
-                    return null;
-                }
+                setTimeout(() => {
+                    minimalLoader.classList.add('show');
+                }, 150);
                 
-                return shader;
-            }
-            
-            resize() {
-                const gl = this.gl;
-                const canvas = this.canvas;
-                
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                
-                gl.viewport(0, 0, canvas.width, canvas.height);
-            }
-            
-            animate() {
-                const gl = this.gl;
-                const time = performance.now() * 0.001;
-                
-                gl.clear(gl.COLOR_BUFFER_BIT);
-                
-                gl.useProgram(this.program);
-                
-                // Mise à jour des uniformes
-                gl.uniform1f(this.uniforms.iTime, time);
-                gl.uniform3f(this.uniforms.iResolution, this.canvas.width, this.canvas.height, this.canvas.width / this.canvas.height);
-                
-                // Attribution des attributs
-                const positionLocation = gl.getAttribLocation(this.program, 'position');
-                gl.enableVertexAttribArray(positionLocation);
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-                
-                // Rendu
-                gl.drawArrays(gl.TRIANGLES, 0, 3);
-                
-                requestAnimationFrame(() => this.animate());
+                setTimeout(() => {
+                    window.location.href = sites[siteIndex].url;
+                }, 300);
+            } else {
+                // Navigation immédiate
+                window.location.href = sites[siteIndex].url;
             }
         }
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('threadsCanvas');
-            new ThreadsBackground(canvas);
+        
+        // Navigation automatique en fin de scroll (plus fluide)
+        let autoTransitionTimeout = null;
+        function handleAutoTransition() {
+            const transitionSection = document.querySelector('.transition-section');
+            const rect = transitionSection.getBoundingClientRect();
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            
+            // Afficher l'indicateur de scroll
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                scrollIndicator.classList.add('show');
+                
+                // Calculer la progression dans la section
+                const sectionProgress = Math.max(0, Math.min(1, 
+                    (window.innerHeight - rect.top) / window.innerHeight
+                ));
+                
+                // Auto-transition douce à 90% de la section
+                if (sectionProgress >= 0.9) {
+                    if (!autoTransitionTimeout && !isTransitioning) {
+                        autoTransitionTimeout = setTimeout(() => {
+                            navigateToNextSite();
+                        }, 800); // Délai pour éviter les transitions trop rapides
+                    }
+                } else {
+                    // Annuler la transition si l'utilisateur remonte
+                    if (autoTransitionTimeout) {
+                        clearTimeout(autoTransitionTimeout);
+                        autoTransitionTimeout = null;
+                    }
+                }
+            } else {
+                scrollIndicator.classList.remove('show');
+                // Nettoyer le timeout si on sort de la section
+                if (autoTransitionTimeout) {
+                    clearTimeout(autoTransitionTimeout);
+                    autoTransitionTimeout = null;
+                }
+            }
+        }
+        
+        // Navigation vers le site suivant
+        function navigateToNextSite() {
+            const nextIndex = (currentSiteIndex + 1) % sites.length;
+            navigateToSite(nextIndex);
+        }
+        
+        // Navigation vers le site précédent
+        function navigateToPrevSite() {
+            const prevIndex = (currentSiteIndex - 1 + sites.length) % sites.length;
+            navigateToSite(prevIndex);
+        }
+        
+        // Simulation de barre de progression
+        function simulateProgress(callback) {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressBar.classList.add('show');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.classList.remove('show');
+                        callback();
+                    }, 200);
+                }
+                progressFill.style.width = progress + '%';
+            }, 100);
+        }
+        
+        // Gestion du loading initial
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('fade-out');
+                detectCurrentSite();
+                preloadPages();
+            }, 1000);
         });
-
-        // Smooth scroll pour les liens
+        
+        // Animation des éléments texte au scroll
+        function handleScrollAnimations() {
+            const projects = document.querySelectorAll('.project-section');
+            
+            projects.forEach((project, projectIndex) => {
+                const rect = project.getBoundingClientRect();
+                const projectHeight = project.offsetHeight;
+                const viewportHeight = window.innerHeight;
+                
+                const scrollProgress = Math.max(0, Math.min(1, 
+                    (-rect.top) / (projectHeight - viewportHeight)
+                ));
+                
+                const textElements = project.querySelectorAll('.text-element');
+                const totalElements = textElements.length;
+                
+                textElements.forEach((element, index) => {
+                    const delay = parseInt(element.dataset.delay) || 0;
+                    const elementProgress = (scrollProgress * totalElements) - delay;
+                    
+                    if (elementProgress >= 0) {
+                        element.classList.add('visible');
+                        element.style.transitionDelay = `${delay * 0.2}s`;
+                    } else {
+                        element.classList.remove('visible');
+                    }
+                });
+                
+                // Animation subtile du média
+                const media = project.querySelector('.media-container video, .media-container img');
+                if (media && scrollProgress > 0 && scrollProgress < 1) {
+                    const scaleValue = 1 + scrollProgress * 0.03;
+                    const rotateValue = scrollProgress * 0.5;
+                    media.style.transform = `scale(${scaleValue}) rotate(${rotateValue}deg)`;
+                } else if (media) {
+                    media.style.transform = 'scale(1) rotate(0deg)';
+                }
+            });
+        }
+        
+        // Gestion de la transition automatique (version optimisée)
+        function handleSiteTransition() {
+            handleAutoTransition();
+        }
+        
+        // Optimisation du scroll avec throttling
+        let ticking = false;
+        function optimizedScrollHandler() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScrollAnimations();
+                    handleSiteTransition();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        // Gestion des événements clavier pour navigation
+        document.addEventListener('keydown', (e) => {
+            if (isTransitioning) return;
+            
+            switch(e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault();
+                    navigateToNextSite();
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    navigateToPrevSite();
+                    break;
+                case 'Escape':
+                    // Retour au site 1 (accueil)
+                    if (currentSiteIndex !== 0) {
+                        navigateToSite(0);
+                    }
+                    break;
+            }
+        });
+        
+        // Gestion des swipes sur mobile
+        let touchStartY = 0;
+        let touchStartX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            if (isTransitioning) return;
+            
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchEndX = e.changedTouches[0].clientX;
+            const deltaY = touchStartY - touchEndY;
+            const deltaX = touchStartX - touchEndX;
+            
+            // Détecter les swipes horizontaux
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    // Swipe vers la gauche - page suivante
+                    navigateToNextSite();
+                } else {
+                    // Swipe vers la droite - page précédente
+                    navigateToPrevSite();
+                }
+            }
+        }, { passive: true });
+        
+        // Event listeners pour la navigation
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('nav-dot')) {
+                const siteIndex = parseInt(e.target.dataset.site);
+                if (siteIndex !== currentSiteIndex) {
+                    navigateToSite(siteIndex);
+                }
+            }
+        });
+        
+        // Event listeners pour le scroll
+        window.addEventListener('scroll', optimizedScrollHandler);
+        
+        // Animation initiale
+        handleScrollAnimations();
+        
+        // Intersection Observer pour des performances optimales
+        const observerOptions = {
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+            rootMargin: '0px'
+        };
+        
+        const projectObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-viewport');
+                } else {
+                    entry.target.classList.remove('in-viewport');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.project-section').forEach(project => {
+            projectObserver.observe(project);
+        });
+        
+        // Smooth scroll pour les liens internes
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -499,6 +995,74 @@
                 }
             });
         });
+        
+        // Gestion de l'historique du navigateur
+        window.addEventListener('popstate', (e) => {
+            // Navigation immédiate pour l'historique
+            if (e.state && e.state.siteIndex !== undefined) {
+                navigateToSite(e.state.siteIndex, true);
+            }
+        });
+        
+        // Ajouter l'état actuel à l'historique
+        if (history.pushState) {
+            history.replaceState({ siteIndex: currentSiteIndex }, '', window.location.href);
+        }
+        
+        // Performance: Pause des vidéos quand elles ne sont pas visibles
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('video').forEach(video => {
+            videoObserver.observe(video);
+        });
+        
+        // Optimisation: Réduction de la qualité des animations sur les appareils moins performants
+        function detectPerformance() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const isSlowDevice = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+            const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+            
+            if (isSlowDevice || isLowEnd) {
+                document.body.classList.add('reduced-animations');
+                // Désactiver certaines animations coûteuses
+                document.querySelectorAll('video').forEach(video => {
+                    video.muted = true;
+                    video.playbackRate = 0.8;
+                });
+            }
+        }
+        
+        // Appliquer les optimisations de performance
+        detectPerformance();
+        
+        // Gestion des erreurs de navigation
+        window.addEventListener('error', (e) => {
+            console.warn('Erreur de navigation:', e);
+            // Réinitialiser l'état en cas d'erreur
+            if (isTransitioning) {
+                setTimeout(() => {
+                    isTransitioning = false;
+                    document.getElementById('fadeOverlay').classList.remove('active');
+                    document.getElementById('minimalLoader').classList.remove('show');
+                }, 2000);
+            }
+        });
+        
+        // Message de debug pour le développement
+        console.log('🚀 Système de navigation multi-sites initialisé');
+        console.log('📍 Site actuel:', sites[currentSiteIndex].title);
+        console.log('⌨️ Utilisation des flèches directionnelles pour naviguer');
+        console.log('📱 Support des swipes sur mobile');
+        console.log('🔄 Préchargement intelligent des pages');
     </script>
 </body>
 </html>
