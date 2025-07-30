@@ -80,7 +80,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: transparent; /* Suppression du fond gris */
+            background: transparent;
             z-index: 1;
         }
 
@@ -90,7 +90,7 @@
             height: 80%;
             object-fit: cover;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15); /* Ombre plus subtile */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             transition: transform 0.8s ease;
         }
 
@@ -177,7 +177,6 @@
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        /* Alternance des projets */
         .project-section:nth-child(even) .media-container {
             left: auto;
             right: 0;
@@ -192,7 +191,6 @@
             transform: translateX(-50px);
         }
 
-        /* Section de transition vers le site suivant */
         .transition-section {
             height: 100vh;
             display: flex;
@@ -249,7 +247,6 @@
             box-shadow: 0 10px 30px rgba(255,255,255,0.2);
         }
 
-        /* Animation de fond pour la transition */
         .transition-bg {
             position: absolute;
             width: 200%;
@@ -263,7 +260,6 @@
             50% { transform: translate(-20px, -20px) rotate(180deg); }
         }
 
-        /* Auto-scroll indicator */
         .scroll-indicator {
             position: fixed;
             bottom: 30px;
@@ -294,7 +290,6 @@
             60% { transform: translateY(-5px); }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -330,7 +325,6 @@
             }
         }
 
-        /* Loading animation */
         .loading {
             position: fixed;
             top: 0;
@@ -364,7 +358,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Link Preview Styles */
         .link-preview {
             position: relative;
             font-weight: 600;
@@ -419,7 +412,6 @@
             border-top-color: white;
         }
 
-        /* Transition fluide entre sites */
         .site-transition {
             position: fixed;
             top: 0;
@@ -467,7 +459,6 @@
         </div>
     </section>
 
-    <!-- Projet 1: CAO -->
     <section class="project-section" data-project="1">
         <div class="project-container">
             <div class="media-container">
@@ -510,7 +501,6 @@
         </div>
     </section>
 
-    <!-- Projet 2: Application Web -->
     <section class="project-section" data-project="2">
         <div class="project-container">
             <div class="media-container">
@@ -550,7 +540,6 @@
         </div>
     </section>
 
-    <!-- Projet 3: Intelligence Artificielle -->
     <section class="project-section" data-project="3">
         <div class="project-container">
             <div class="media-container">
@@ -594,13 +583,11 @@
         </div>
     </section>
 
-    <!-- Section de transition vers le site suivant -->
     <section class="transition-section">
         <div class="transition-bg"></div>
         <div class="transition-content">
             <h2 class="transition-title">À propos de moi</h2>
             <p class="transition-subtitle">Découvrez mon parcours et ma passion pour la technologie</p>
-            <a href="#" class="next-site-btn" id="nextSiteBtn">Continuer l'exploration →</a>
         </div>
     </section>
 
@@ -677,9 +664,8 @@
             if (rect.top <= window.innerHeight && rect.bottom >= 0) {
                 scrollIndicator.classList.add('show');
                 
-                // Auto-transition quand on atteint 80% de la section
-                const sectionProgress = (-rect.top) / (transitionSection.offsetHeight - window.innerHeight);
-                if (sectionProgress >= 0.8) {
+                // Auto-transition quand on atteint la fin de la page
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                     navigateToNextSite();
                 }
             } else {
@@ -695,15 +681,7 @@
                 siteTransition.classList.add('active');
                 
                 setTimeout(() => {
-                    // Ici vous redirigeriez vers le site suivant
-                    // window.location.href = sites[nextIndex];
-                    console.log(`Navigation vers: ${sites[nextIndex]}`);
-                    
-                    // Pour la démo, on simule le chargement
-                    setTimeout(() => {
-                        siteTransition.classList.remove('active');
-                        // En production, cette ligne ne sera pas nécessaire car on change de page
-                    }, 2000);
+                    window.location.href = sites[nextIndex];
                 }, 800);
             }
         }
@@ -723,10 +701,6 @@
 
         // Event listeners
         window.addEventListener('scroll', optimizedScrollHandler);
-        document.getElementById('nextSiteBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            navigateToNextSite();
-        });
         
         // Animation initiale
         handleScrollAnimations();
@@ -797,7 +771,7 @@
                     clearTimeout(hoverTimeout);
                     hoverTimeout = setTimeout(() => {
                         tooltip.classList.add('show');
-                    }, 300); // Délai de 300ms comme Tailwind
+                    }, 300);
                 });
                 
                 // Hover leave
