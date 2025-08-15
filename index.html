@@ -256,47 +256,6 @@
             width: 220px;
         }
         
-        .menu-lines {
-            position: fixed;
-            right: 20px;
-            top: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            align-items: flex-end;
-            padding: 50px 0;
-            pointer-events: none;
-        }
-
-        .line {
-            height: 1px;
-            background: #ccc;
-            transition: all 0.3s ease;
-        }
-
-        .line.short {
-            width: 15px;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .line.long {
-            width: 25px;
-            background: #999;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .sidebar:hover .line.long {
-            width: 130px;
-            background: #bbb;
-        }
-
-        .sidebar:hover .line.short {
-            opacity: 0.4;
-            width: 80px;
-            background: #aaa;
-        }
-
         .menu-items {
             list-style: none;
             padding: 0;
@@ -307,9 +266,9 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centrer verticalement */
+            justify-content: center;
             align-items: flex-end;
-            gap: 40px; /* Espace entre les items */
+            gap: 30px;
             padding-right: 20px;
             pointer-events: auto;
         }
@@ -326,7 +285,7 @@
             text-transform: uppercase;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
-            min-width: 180px; /* Largeur pour le texte */
+            min-width: 180px;
             transform: translateX(110px);
             text-align: right;
             padding: 5px 0;
@@ -346,68 +305,149 @@
             color: #764ba2 !important;
             font-weight: 700;
         }
-
-        .sidebar:hover .menu-item.active a {
-            color: #764ba2;
-        }
         
-        .sidebar::before {
-            content: '';
+        /* Section Compétences */
+        .skills-section {
+            padding: 100px 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            background: #f8f9fa;
+        }
+
+        .skills-section h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .skills-list {
+            --gap: 8px;
+            --base: clamp(2rem, 8cqi, 80px);
+            --easing: linear(0 0%, 0.1538 4.09%, 0.2926 8.29%, 0.4173 12.63%, 0.5282 17.12%, 0.6255 21.77%, 0.7099 26.61%, 0.782 31.67%, 0.8425 37%, 0.8887 42.23%, 0.9257 47.79%, 0.9543 53.78%, 0.9752 60.32%, 0.9883 67.11%, 0.9961 75%, 1 100%);
+            --speed: 0.6s;
+
+            display: grid;
+            container-type: inline-size;
+            grid-template-columns: 10fr 1fr 1fr 1fr 1fr;
+            gap: var(--gap);
+            list-style-type: none;
+            justify-content: center;
+            padding: 0;
+            height: clamp(300px, 50vh, 480px);
+            margin: 0;
+            width: 900px;
+            max-width: calc(100% - 2rem);
+            transition: grid-template-columns var(--speed) var(--easing);
+        }
+
+        .skills-list li {
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            min-width: var(--base);
+            border-radius: 12px;
+            border: 1px solid #e5e5e7;
+            cursor: pointer;
+        }
+
+        .skills-list article {
+            width: calc(var(--article-width) * 1px);
+            height: 100%;
             position: absolute;
             top: 0;
-            right: 0;
-            width: 1px;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-inline: calc(var(--base) * 0.5 - 9px);
+            padding-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .skills-list article h3 {
+            white-space: nowrap;
+            margin: 0;
+            position: absolute;
+            top: 1rem;
+            left: calc(var(--base) * 0.5);
+            transform-origin: 0 50%;
+            rotate: 90deg;
+            font-size: 1rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #86868b;
+        }
+
+        .skills-list article p {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #1d1d1f;
+            --opacity: 0.8;
+        }
+
+        .skills-list article img {
+            position: absolute;
+            pointer-events: none;
+            inset: 0;
+            width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, transparent 0%, rgba(102, 126, 234, 0.3) 50%, transparent 100%);
+            object-fit: cover;
+            mask: radial-gradient(100% 100% at 100% 0, #fff, #0000);
+        }
+
+        .skills-list li :is(h3) {
+            opacity: 0.8;
+            transition: opacity calc(var(--speed) * 1.2) var(--easing);
+        }
+
+        .skills-list li p {
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity calc(var(--speed) * 1.2) var(--easing);
         }
 
-        .sidebar:hover::before {
-            opacity: 1;
+        .skills-list li img {
+            filter: grayscale(1) brightness(1.2);
+            scale: 1.1;
+            transition: filter calc(var(--speed) * 1.2) var(--easing), scale calc(var(--speed) * 1.2) var(--easing);
         }
 
+        .skills-list li[data-active='true'] :is(p, h3) {
+            opacity: var(--opacity, 1);
+        }
+
+        .skills-list li[data-active='true'] p {
+            transition-delay: calc(var(--speed) * 0.25);
+        }
+
+        .skills-list li[data-active='true'] img {
+            filter: grayscale(0) brightness(1);
+            scale: 1;
+            transition-delay: calc(var(--speed) * 0.25);
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .project-container {
-                flex-direction: column;
-                position: relative;
-            }
-            
-            .project-section {
-                height: auto;
-            }
-
-            .media-container,
-            .content-container {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding: 40px 30px;
-            }
-            
-             .media-container {
-                height: 50vh;
-            }
-
-            .project-title {
-                font-size: 2rem;
-            }
-            
-            .project-section:nth-of-type(even) .media-container,
-            .project-section:nth-of-type(even) .content-container {
-                left: auto;
-                right: auto;
-            }
-
-            .sidebar {
-                display: none; /* Cacher le menu sur les petits écrans pour simplicité */
-            }
+            .hero h1 { font-size: 2.5rem; }
+            .project-container { flex-direction: column; position: relative; }
+            .project-section { height: auto; }
+            .media-container, .content-container { position: relative; width: 100%; height: auto; padding: 40px 30px; }
+            .media-container { height: 50vh; }
+            .project-title { font-size: 2rem; }
+            .project-section:nth-of-type(even) .media-container, .project-section:nth-of-type(even) .content-container { left: auto; right: auto; }
+            .sidebar { display: none; }
+            .skills-section h2 { font-size: 2.5rem; }
+            .skills-list { grid-template-columns: 1fr; grid-template-rows: repeat(5, 1fr); height: auto; gap: 1rem; }
+            .skills-list li { min-height: 200px; }
+            .skills-list li[data-active='true'] { min-height: 300px; }
+            .skills-list article { width: 100%; }
+            .skills-list article h3 { display: none; }
+            .skills-list article p { opacity: 1; padding: 1rem; background: rgba(255,255,255,0.7); backdrop-filter: blur(5px); border-radius: 8px; }
         }
     </style>
 </head>
@@ -427,20 +467,13 @@
         <section id="project-1" class="project-section">
             <div class="project-container">
                 <div class="media-container">
-                    <video autoplay muted loop playsinline>
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                    </video>
+                    <video autoplay muted loop playsinline><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"></video>
                 </div>
                 <div class="content-container">
                     <div class="text-element" data-delay="0"><h2 class="project-title">Conception CAO Avancée</h2></div>
                     <div class="text-element" data-delay="1"><p class="project-subtitle">Modélisation 3D & Prototypage</p></div>
                     <div class="text-element" data-delay="2"><p class="project-description">Développement d'un système de modélisation 3D complexe avec simulation en temps réel.</p></div>
-                    <div class="text-element" data-delay="3"><p class="project-description">L'interface intuitive permet aux ingénieurs de créer rapidement des prototypes virtuels.</p></div>
-                    <div class="text-element" data-delay="4">
-                        <div class="tech-stack">
-                            <span class="tech-tag">SolidWorks</span><span class="tech-tag">Python</span><span class="tech-tag">OpenGL</span><span class="tech-tag">C++</span>
-                        </div>
-                    </div>
+                    <div class="text-element" data-delay="4"><div class="tech-stack"><span class="tech-tag">SolidWorks</span><span class="tech-tag">Python</span><span class="tech-tag">OpenGL</span><span class="tech-tag">C++</span></div></div>
                     <div class="text-element" data-delay="5"><a href="#" class="project-link">Voir le projet →</a></div>
                 </div>
             </div>
@@ -448,19 +481,12 @@
 
         <section id="project-2" class="project-section">
             <div class="project-container">
-                <div class="media-container">
-                    <img src="https://picsum.photos/800/600?random=2" alt="Application Web" loading="lazy">
-                </div>
+                <div class="media-container"><img src="https://picsum.photos/800/600?random=2" alt="Application Web" loading="lazy"></div>
                 <div class="content-container">
                     <div class="text-element" data-delay="0"><h2 class="project-title">Application Web Progressive</h2></div>
                     <div class="text-element" data-delay="1"><p class="project-subtitle">Interface Moderne & Réactive</p></div>
                     <div class="text-element" data-delay="2"><p class="project-description">Création d'une application web progressive avec une architecture microservices.</p></div>
-                    <div class="text-element" data-delay="3"><p class="project-description">Intégration d'APIs REST, authentification sécurisée et tableau de bord analytique.</p></div>
-                    <div class="text-element" data-delay="4">
-                        <div class="tech-stack">
-                            <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">Docker</span>
-                        </div>
-                    </div>
+                    <div class="text-element" data-delay="4"><div class="tech-stack"><span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">Docker</span></div></div>
                     <div class="text-element" data-delay="5"><a href="#" class="project-link">Découvrir →</a></div>
                 </div>
             </div>
@@ -468,24 +494,56 @@
 
         <section id="project-3" class="project-section">
             <div class="project-container">
-                <div class="media-container">
-                    <video autoplay muted loop playsinline>
-                        <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4">
-                    </video>
-                </div>
+                <div class="media-container"><video autoplay muted loop playsinline><source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4" type="video/mp4"></video></div>
                 <div class="content-container">
                     <div class="text-element" data-delay="0"><h2 class="project-title">IA & Machine Learning</h2></div>
                     <div class="text-element" data-delay="1"><p class="project-subtitle">Algorithmes Prédictifs Avancés</p></div>
                     <div class="text-element" data-delay="2"><p class="project-description">Développement d'un système d'intelligence artificielle pour l'analyse prédictive de données.</p></div>
-                    <div class="text-element" data-delay="3"><p class="project-description">Implémentation de réseaux de neurones profonds avec optimisation GPU.</p></div>
-                    <div class="text-element" data-delay="4">
-                        <div class="tech-stack">
-                            <span class="tech-tag">TensorFlow</span><span class="tech-tag">Python</span><span class="tech-tag">CUDA</span><span class="tech-tag">Jupyter</span>
-                        </div>
-                    </div>
+                    <div class="text-element" data-delay="4"><div class="tech-stack"><span class="tech-tag">TensorFlow</span><span class="tech-tag">Python</span><span class="tech-tag">CUDA</span><span class="tech-tag">Jupyter</span></div></div>
                     <div class="text-element" data-delay="5"><a href="#" class="project-link">Explorer →</a></div>
                 </div>
             </div>
+        </section>
+
+        <section id="skills" class="skills-section">
+            <h2>Compétences</h2>
+            <ul class="skills-list">
+                <li data-active="true">
+                    <article>
+                        <h3>IUT Bordeaux Montaigne</h3>
+                        <p>Formation universitaire axée sur la gestion de données géographiques et l'aménagement du territoire.</p>
+                        <img src="https://picsum.photos/720/720?random=1" alt="Image pour IUT Bordeaux" />
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3>SIG & Représentation</h3>
+                        <p>Maîtrise des Systèmes d'Information Géographique pour l'analyse spatiale et la cartographie thématique.</p>
+                        <img src="https://picsum.photos/720/720?random=2" alt="Image pour SIG" />
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3>Outils Numériques</h3>
+                        <p>Compétences en programmation (Python), bases de données (SQL) et outils de design (Suite Adobe).</p>
+                        <img src="https://picsum.photos/720/720?random=3" alt="Image pour Outils Numériques" />
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3>Visualisation de Données</h3>
+                        <p>Création de visualisations interactives et de tableaux de bord pour communiquer des informations complexes.</p>
+                        <img src="https://picsum.photos/720/720?random=4" alt="Image pour Visualisation" />
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3>Analyse Territoriale</h3>
+                        <p>Application des méthodes d'analyse pour comprendre les dynamiques et enjeux des territoires.</p>
+                        <img src="https://picsum.photos/720/720?random=5" alt="Image pour Analyse territoriale" />
+                    </article>
+                </li>
+            </ul>
         </section>
 
         <footer style="text-align: center; padding: 40px; background: #1d1d1f; color: #f8f9fa;">
@@ -499,19 +557,25 @@
             <li class="menu-item"><a href="#project-1">Projet CAO</a></li>
             <li class="menu-item"><a href="#project-2">App Web</a></li>
             <li class="menu-item"><a href="#project-3">Projet IA</a></li>
+            <li class="menu-item"><a href="#skills">Compétences</a></li>
         </ul>
     </nav>
 
-
     <script>
-        // Gestion de l'écran de chargement
+        // --- GESTION GLOBALE ---
         window.addEventListener('load', () => {
+            // Écran de chargement
             setTimeout(() => {
                 document.getElementById('loading').classList.add('fade-out');
             }, 500);
+            
+            // Initialisation de la section compétences
+            initSkillsSection();
         });
 
-        // Fonction pour gérer les animations de défilement (pour desktop)
+        // --- ANIMATIONS DES PROJETS ---
+        
+        // Pour desktop (animation au scroll)
         function handleScrollAnimations() {
             const projects = document.querySelectorAll('.project-section');
             projects.forEach((project) => {
@@ -542,7 +606,7 @@
             });
         }
 
-        // Gérer les animations sur les appareils tactiles avec Intersection Observer
+        // Pour mobile/tactile (animation à l'entrée dans le viewport)
         function handleTouchDeviceAnimations() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -560,7 +624,7 @@
             });
         }
 
-        // Détection du type d'appareil pour lancer les bonnes animations
+        // Détection du type d'appareil pour choisir la bonne méthode d'animation
         if (window.matchMedia("(pointer: coarse)").matches) {
             handleTouchDeviceAnimations();
         } else {
@@ -575,23 +639,17 @@
                 }
             }
             window.addEventListener('scroll', optimizedScrollHandler);
-            handleScrollAnimations();
+            handleScrollAnimations(); // Appel initial
         }
 
-        // --- NOUVEAU SCRIPT POUR LE MENU DE NAVIGATION ---
+        // --- MENU DE NAVIGATION ---
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section[id]');
             const menuItems = document.querySelectorAll('.sidebar .menu-item');
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Retirer 'active' de tous les items
-                        menuItems.forEach(item => {
-                            item.classList.remove('active');
-                        });
-
-                        // Ajouter 'active' à l'item correspondant à la section visible
+                        menuItems.forEach(item => item.classList.remove('active'));
                         const id = entry.target.getAttribute('id');
                         const activeLink = document.querySelector(`.sidebar .menu-item a[href="#${id}"]`);
                         if (activeLink) {
@@ -599,16 +657,42 @@
                         }
                     }
                 });
-            }, {
-                rootMargin: '-50% 0px -50% 0px', // La section est active quand son centre passe le centre de l'écran
-                threshold: 0
-            });
-
-            sections.forEach(section => {
-                observer.observe(section);
-            });
+            }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+            sections.forEach(section => observer.observe(section));
         });
 
+        // --- SECTION COMPÉTENCES ---
+        function initSkillsSection() {
+            const list = document.querySelector('.skills-list');
+            if (!list) return;
+            const items = list.querySelectorAll('li');
+
+            const setIndex = (event) => {
+                const closest = event.target.closest('li');
+                if (closest) {
+                    const index = [...items].indexOf(closest);
+                    const cols = new Array(items.length)
+                        .fill('1fr')
+                        .map((_, i) => {
+                            items[i].dataset.active = (index === i).toString();
+                            return index === i ? '10fr' : '1fr';
+                        })
+                        .join(' ');
+                    list.style.setProperty('grid-template-columns', cols);
+                }
+            };
+
+            const resync = () => {
+                if(window.innerWidth > 768) { // Ne s'applique que sur grand écran
+                    const w = Math.max(...[...items].map(i => i.offsetWidth));
+                    list.style.setProperty('--article-width', w);
+                }
+            };
+
+            list.addEventListener('pointermove', setIndex);
+            window.addEventListener('resize', resync);
+            resync();
+        }
     </script>
 </body>
 </html>
