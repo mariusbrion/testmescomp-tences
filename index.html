@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Accueil & Projets</title>
+    <!-- Ajout de la police Shrikhand depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Shrikhand&display=swap" rel="stylesheet">
     <style>
         /* CSS Global */
         * {
@@ -23,41 +25,71 @@
             overflow-x: hidden;
         }
 
-        /* Section Héros */
+        /* NOUVELLE Section Héros avec Vidéo */
         .hero {
+            position: relative;
             height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
+            align-items: center;
             text-align: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Ajout d'une superposition sombre pour la lisibilité du texte */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        .hero .name, .hero .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .name {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 1.8rem;
+            font-family: 'Shrikhand', cursive;
         }
 
         .hero h1 {
             font-size: 4rem;
-            font-weight: 300;
-            color: white;
+            font-weight: normal;
+            font-family: 'Shrikhand', cursive;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            line-height: 1.2;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 1.5s ease forwards;
         }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.8);
-            margin-top: 1rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1.5s ease 0.3s forwards;
-        }
-
+        
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -183,23 +215,10 @@
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        .project-section:nth-of-type(even) .media-container {
-            left: auto;
-            right: 0;
-        }
-
-        .project-section:nth-of-type(even) .content-container {
-            right: auto;
-            left: 0;
-        }
-
-        .project-section:nth-of-type(even) .text-element {
-            transform: translateX(-50px);
-        }
-        
-        .project-section:nth-of-type(even) .text-element.visible {
-            transform: translateX(0);
-        }
+        .project-section:nth-of-type(even) .media-container { left: auto; right: 0; }
+        .project-section:nth-of-type(even) .content-container { right: auto; left: 0; }
+        .project-section:nth-of-type(even) .text-element { transform: translateX(-50px); }
+        .project-section:nth-of-type(even) .text-element.visible { transform: translateX(0); }
 
         /* Loading animation */
         .loading {
@@ -252,9 +271,7 @@
             overflow: hidden;
         }
 
-        .sidebar:hover {
-            width: 220px;
-        }
+        .sidebar:hover { width: 220px; }
         
         .menu-items {
             list-style: none;
@@ -291,20 +308,9 @@
             padding: 5px 0;
         }
 
-        .sidebar:hover .menu-item a {
-            color: #999;
-            transform: translateX(0);
-        }
-
-        .menu-item a:hover {
-            color: #667eea !important;
-            transform: translateX(-8px) !important;
-        }
-
-        .menu-item.active a {
-            color: #764ba2 !important;
-            font-weight: 700;
-        }
+        .sidebar:hover .menu-item a { color: #999; transform: translateX(0); }
+        .menu-item a:hover { color: #667eea !important; transform: translateX(-8px) !important; }
+        .menu-item.active a { color: #764ba2 !important; font-weight: 700; }
         
         /* Section Compétences */
         .skills-section {
@@ -327,9 +333,8 @@
         .skills-list {
             --gap: 8px;
             --base: clamp(2rem, 8cqi, 80px);
-            --easing: linear(0 0%, 0.1538 4.09%, 0.2926 8.29%, 0.4173 12.63%, 0.5282 17.12%, 0.6255 21.77%, 0.7099 26.61%, 0.782 31.67%, 0.8425 37%, 0.8887 42.23%, 0.9257 47.79%, 0.9543 53.78%, 0.9752 60.32%, 0.9883 67.11%, 0.9961 75%, 1 100%);
+            --easing: linear(0 0%,0.1538 4.09%,0.2926 8.29%,0.4173 12.63%,0.5282 17.12%,0.6255 21.77%,0.7099 26.61%,0.782 31.67%,0.8425 37%,0.8887 42.23%,0.9257 47.79%,0.9543 53.78%,0.9752 60.32%,0.9883 67.11%,0.9961 75%,1 100%);
             --speed: 0.6s;
-
             display: grid;
             container-type: inline-size;
             grid-template-columns: 10fr 1fr 1fr 1fr 1fr;
@@ -384,13 +389,7 @@
             color: #86868b;
         }
 
-        .skills-list article p {
-            font-size: 14px;
-            line-height: 1.4;
-            color: #1d1d1f;
-            --opacity: 0.8;
-        }
-
+        .skills-list article p { font-size: 14px; line-height: 1.4; color: #1d1d1f; --opacity: 0.8; }
         .skills-list article img {
             position: absolute;
             pointer-events: none;
@@ -401,30 +400,16 @@
             mask: radial-gradient(100% 100% at 100% 0, #fff, #0000);
         }
 
-        .skills-list li :is(h3) {
-            opacity: 0.8;
-            transition: opacity calc(var(--speed) * 1.2) var(--easing);
-        }
-
-        .skills-list li p {
-            opacity: 0;
-            transition: opacity calc(var(--speed) * 1.2) var(--easing);
-        }
-
+        .skills-list li :is(h3) { opacity: 0.8; transition: opacity calc(var(--speed) * 1.2) var(--easing); }
+        .skills-list li p { opacity: 0; transition: opacity calc(var(--speed) * 1.2) var(--easing); }
         .skills-list li img {
             filter: grayscale(1) brightness(1.2);
             scale: 1.1;
             transition: filter calc(var(--speed) * 1.2) var(--easing), scale calc(var(--speed) * 1.2) var(--easing);
         }
 
-        .skills-list li[data-active='true'] :is(p, h3) {
-            opacity: var(--opacity, 1);
-        }
-
-        .skills-list li[data-active='true'] p {
-            transition-delay: calc(var(--speed) * 0.25);
-        }
-
+        .skills-list li[data-active='true'] :is(p, h3) { opacity: var(--opacity, 1); }
+        .skills-list li[data-active='true'] p { transition-delay: calc(var(--speed) * 0.25); }
         .skills-list li[data-active='true'] img {
             filter: grayscale(0) brightness(1);
             scale: 1;
@@ -434,6 +419,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
+            .hero .name { font-size: 1.5rem; left: 20px; top: 20px; }
             .project-container { flex-direction: column; position: relative; }
             .project-section { height: auto; }
             .media-container, .content-container { position: relative; width: 100%; height: auto; padding: 40px 30px; }
@@ -458,22 +444,32 @@
 
     <main>
         <section id="home" class="hero">
-            <div>
-                <h1>Mon Portfolio</h1>
-                <p class="hero-subtitle">Développeur Full-Stack & Designer</p>
+            <div class="video-background">
+                <video autoplay muted loop preload="auto" playsinline>
+                    <source src="https://videos.pexels.com/video-files/20046744/20046744-uhd_3840_2160_60fps.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+            </div>
+            <div class="name">Marius Brion</div>
+            <div class="content">
+                <h1>Étudiant en<br>Villes et Territoires Durables</h1>
             </div>
         </section>
 
         <section id="project-1" class="project-section">
             <div class="project-container">
                 <div class="media-container">
-                    <video autoplay muted loop playsinline><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"></video>
+                    <video autoplay muted loop playsinline>
+                        <source src="CAO.mp4" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
                 </div>
                 <div class="content-container">
-                    <div class="text-element" data-delay="0"><h2 class="project-title">Conception CAO Avancée</h2></div>
-                    <div class="text-element" data-delay="1"><p class="project-subtitle">Modélisation 3D & Prototypage</p></div>
-                    <div class="text-element" data-delay="2"><p class="project-description">Développement d'un système de modélisation 3D complexe avec simulation en temps réel.</p></div>
-                    <div class="text-element" data-delay="4"><div class="tech-stack"><span class="tech-tag">SolidWorks</span><span class="tech-tag">Python</span><span class="tech-tag">OpenGL</span><span class="tech-tag">C++</span></div></div>
+                    <div class="text-element" data-delay="0"><h2 class="project-title">Projet CAO</h2></div>
+                    <div class="text-element" data-delay="1"><p class="project-subtitle">Liaison cyclable entre les Bassins à Flots et les quais – Bordeaux</p></div>
+                    <div class="text-element" data-delay="2"><p class="project-description">Ce projet fictif propose la conception d’une piste cyclable visant à renforcer la continuité des mobilités douces sur le territoire bordelais. L’aménagement relie la zone piétonne des Bassins à Flots à la piste cyclable déjà existante le long des quais.</p></div>
+                    <div class="text-element" data-delay="3"><p class="project-description">Réalisé sous SketchUp, ce travail illustre comment la CAO peut aider à préfigurer un aménagement cohérent et adapté aux enjeux de mobilité durable.</p></div>
+                    <div class="text-element" data-delay="4"><div class="tech-stack"><span class="tech-tag">Analyse Territoriale</span><span class="tech-tag">Outils Numériques</span></div></div>
                     <div class="text-element" data-delay="5"><a href="#" class="project-link">Voir le projet →</a></div>
                 </div>
             </div>
@@ -564,18 +560,13 @@
     <script>
         // --- GESTION GLOBALE ---
         window.addEventListener('load', () => {
-            // Écran de chargement
             setTimeout(() => {
                 document.getElementById('loading').classList.add('fade-out');
             }, 500);
-            
-            // Initialisation de la section compétences
             initSkillsSection();
         });
 
         // --- ANIMATIONS DES PROJETS ---
-        
-        // Pour desktop (animation au scroll)
         function handleScrollAnimations() {
             const projects = document.querySelectorAll('.project-section');
             projects.forEach((project) => {
@@ -606,7 +597,6 @@
             });
         }
 
-        // Pour mobile/tactile (animation à l'entrée dans le viewport)
         function handleTouchDeviceAnimations() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -624,7 +614,6 @@
             });
         }
 
-        // Détection du type d'appareil pour choisir la bonne méthode d'animation
         if (window.matchMedia("(pointer: coarse)").matches) {
             handleTouchDeviceAnimations();
         } else {
@@ -639,7 +628,7 @@
                 }
             }
             window.addEventListener('scroll', optimizedScrollHandler);
-            handleScrollAnimations(); // Appel initial
+            handleScrollAnimations();
         }
 
         // --- MENU DE NAVIGATION ---
@@ -666,7 +655,6 @@
             const list = document.querySelector('.skills-list');
             if (!list) return;
             const items = list.querySelectorAll('li');
-
             const setIndex = (event) => {
                 const closest = event.target.closest('li');
                 if (closest) {
@@ -681,14 +669,12 @@
                     list.style.setProperty('grid-template-columns', cols);
                 }
             };
-
             const resync = () => {
-                if(window.innerWidth > 768) { // Ne s'applique que sur grand écran
+                if(window.innerWidth > 768) {
                     const w = Math.max(...[...items].map(i => i.offsetWidth));
                     list.style.setProperty('--article-width', w);
                 }
             };
-
             list.addEventListener('pointermove', setIndex);
             window.addEventListener('resize', resync);
             resync();
